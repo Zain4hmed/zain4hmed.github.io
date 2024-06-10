@@ -21,6 +21,7 @@ body {
 
 .grid-item {
     overflow: hidden;
+    position: relative; /* Ensure relative positioning for the text */
 }
 
 .grid-item img {
@@ -28,4 +29,21 @@ body {
     height: 100%;
     object-fit: cover; /* Ensures the image covers the entire grid item */
     display: block;
+    transition: filter 0.3s ease; /* Smooth transition for selection effect */
+}
+
+/* Selected state for images */
+.grid-item img.selected {
+    filter: brightness(20%); /* Darkens the image when selected */
+}
+
+/* Text display */
+.grid-item img.selected::after {
+    content: "checked";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
 }

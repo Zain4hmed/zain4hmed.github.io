@@ -12,6 +12,11 @@ document.addEventListener("DOMContentLoaded", function() {
         img.src = `images/image${i}.jpg`;  // Change the extension to .jpg
         img.alt = `Image ${i}`;
 
+        // Add event listener to toggle selection on click
+        img.addEventListener("click", function() {
+            this.classList.toggle("selected");
+        });
+
         div.appendChild(img);
         gridContainer.appendChild(div);
     }
