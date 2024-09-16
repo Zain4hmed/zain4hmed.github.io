@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('vimal-s-GBg3jyGS-Ug-unsplash.jpg'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.0); /* Semi-transparent white */
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Soft shadow */
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            backdrop-filter: blur(3px) brightness(1.2); /* Frosted glass effect */
+            border: 1px solid rgba(255, 255, 255, 0.05); /* Light border */
+            overflow: hidden;
+            color: #e0e0e0; /* Light text color */
+            box-sizing: border-box; /* Ensure padding is included in width calculation */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="number"], input[type="time"], button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #363636;
+            font-size: 16px;
+            width: 100%; /* Ensure input fields and buttons take full width of the card */
+            box-sizing: border-box; /* Include padding and border in width calculation */
+        }
+
+        input[type="number"], input[type="time"] {
+            background-color: #161616; /* Dark mode background */
+            color: #fff; /* Light text color for dark mode */
+        }
+
+        button {
+            background-color: #6200ea;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none; /* Remove border for buttons */
+        }
+
+        button:hover {
+            background-color: #3700b3;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin: 0;
+            color: #e0e0e0; /* Light text color */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #e0e0e0; /* Light text color */
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="form-group">
+            <input type="number" placeholder="Monday" id="Monday">
+        </div>
+        <div class="form-group">
+            <input type="number" placeholder="Tuesday" id="Tuesday">
+        </div>
+        <div class="form-group">
+            <input type="number" placeholder="Wednesday" id="Wednesday">
+        </div>
+        <div class="form-group">
+            <input type="number" placeholder="Thursday" id="Thursday">
+        </div>
+        <div class="form-group">
+            <input type="number" placeholder="Friday" id="Friday">
+        </div>
+        <div class="form-group">
+            <label for="timeInput">Entry Time:</label>
+            <input type="time" id="timeInput" name="timeInput">
+        </div>
+        <div class="form-group">
+            <button onclick="calculate()">Calculate Exit Time</button>
+        </div>
+        <div class="form-group">
+            <p id="output"></p>
+        </div>
+    </div>
+
+    <script>
+        function weekTimeInMins() {
+            let mon = Number(document.getElementById('Monday').value) || 0;
+            let tue = Number(document.getElementById('Tuesday').value) || 0;
+            let wed = Number(document.getElementById('Wednesday').value) || 0;
+            let thu = Number(document.getElementById('Thursday').value) || 0;
+            let fri = Number(document.getElementById('Friday').value) || 0;
+
+            return (mon + tue + wed + thu + fri) * 60;
+        }
+
+        function timeInHHMM(mins) {
+            let time = mins / 60;
+            let hrs = Math.trunc(time);
+            let minInPercentage = time - hrs;
+            let min = Math.trunc(minInPercentage * 60);
+
+            return [hrs, min];
+        }
+
+        function calculate() {
+            let remainingtime = (45 * 60) - weekTimeInMins();
+            let friEntrytime = document.getElementById('timeInput').value;
+
+            let [frihrs, frimin] = friEntrytime.split(':').map(Number);
+            let totalTimeInMins = (remainingtime + (Number(frihrs) * 60) + Number(frimin)) - (12 * 60);
+
+            let exitTime = timeInHHMM(totalTimeInMins);
+            let remingTime = timeInHHMM(remainingtime);
+            document.getElementById('output').innerText = "Exit time is " + exitTime[0] + ":" + exitTime[1] + " PM , you need to spend " + remingTime[0] + " hr and " + remingTime[1] + " min in office";
+        }
+    </script>
+</body>
+</html>
