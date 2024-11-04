@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D Matrix Path Highlight</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh; /* Full height of the viewport */
+      margin: 0; /* Remove default margin */
+    }
+
+    #matrixContainer {
+      display: grid;
+      grid-template-columns: repeat(10, 50px); /* Change to 10 for 10 columns */
+      gap: 0; /* Remove gap to avoid spaces between cells */
+    }
+
+    .cell {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0); /* Initial transparent background */
+      color: black; /* Black text color */
+      border: 1px solid black; /* Black border */
+      transition: background-color 0.3s;
+    }
+
+    .highlighted {
+      background-color: black;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="matrixContainer"></div>
+
+  <script>
+    const grid = [[56,137,288,177,252,297,63,107,252,37],[102,89,50,276,41,176,105,242,282,259],[276,187,262,117,92,57,13,224,80,167],[246,263,277,223,115,156,231,294,8,253],[70,195,78,101,136,256,59,213,120,42],[186,74,265,258,285,181,21,193,53,278],[132,283,229,154,183,299,6,16,144,61],[186,99,123,245,41,140,295,111,289,230],[285,242,278,146,286,128,180,54,245,239],[281,166,159,51,148,113,287,44,133,214],[112,74,149,67,167,232,5,115,279,27],[16,288,77,159,288,62,4,71,221,195]];
+
+    const rows = grid.length;
+    const cols = grid[0].length;
+
+    // Track visits to each cell
+    const visitCount = Array.from({ length: rows }, () => Array(cols).fill(0));
+
+    // Function to add delay
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    // Create cells in the DOM
+    const cellElements = [];
+    const gridContainer = document.getElementById('matrixContainer');
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        const cell = document.createElement('div');
+        cell.textContent = grid[i][j];
+        cell.classList.add('cell'); // Add class for styling
+        gridContainer.appendChild(cell);
+        cellElements.push(cell);
+      }
+    }
+
+    // Recursive function to calculate max moves with delay for each highlight
+    async function findMaxPath(row, col) {
+      if (row < 0 || col < 0 || row >= rows || col >= cols) {
+        return 0; // Out of bounds
+      }
+
+      // Increment visit count for the cell
+      visitCount[row][col] += 1;
+
+      // Set cell opacity based on visit count
+      cellElements[row * cols + col].style.backgroundColor = `rgba(0, 100, 0, ${Math.min(visitCount[row][col] * 0.3, 1)})`;
+
+      // Add a delay for the highlight
+      await delay(500);
+
+      let maxDepth = 0;
+
+      // Move up-right
+      if (row >= 1 && col < cols - 1 && grid[row - 1][col + 1] > grid[row][col]) {
+        const depth = await findMaxPath(row - 1, col + 1);
+        maxDepth = Math.max(maxDepth, depth);
+      }
+
+      // Move right
+      if (col < cols - 1 && grid[row][col + 1] > grid[row][col]) {
+        const depth = await findMaxPath(row, col + 1);
+        maxDepth = Math.max(maxDepth, depth);
+      }
+
+      // Move down-right
+      if (row < rows - 1 && col < cols - 1 && grid[row + 1][col + 1] > grid[row][col]) {
+        const depth = await findMaxPath(row + 1, col + 1);
+        maxDepth = Math.max(maxDepth, depth);
+      }
+
+      // Temporarily change cell color to red on backtracking
+      const previousColor = cellElements[row * cols + col].style.backgroundColor;
+      cellElements[row * cols + col].style.backgroundColor = 'red';
+
+      // Add a small delay to make the red background visible
+      await delay(300);
+
+      // Restore the cell's original opacity after backtracking without increasing or altering the opacity
+      cellElements[row * cols + col].style.backgroundColor = previousColor;
+
+      // Return the maximum depth found, adding 1 for the current cell
+      return maxDepth + 1;
+    }
+
+    // Find the maximum path starting from each cell in the first column
+    async function findMaxMoves() {
+      let maxMoves = 0;
+      for (let row = 0; row < rows; row++) {
+        const moves = await findMaxPath(row, 0);
+        maxMoves = Math.max(maxMoves, moves);
+      }
+      console.log("Maximum moves:", maxMoves - 1);
+    }
+
+    // Start the pathfinding with delay
+    findMaxMoves();
+  </script>
+
+</body>
+</html>
