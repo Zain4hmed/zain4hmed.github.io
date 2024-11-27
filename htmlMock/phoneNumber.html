@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Number Validation</title>
+</head>
+<body>
+  <form id="mobileForm">
+    <label for="mobile">Mobile Number:</label>
+    <select id="countryCode" name="countryCode">
+      <option value="+91" data-length="10" selected>India (+91)</option>
+      <option value="+1" data-length="10">United States (+1)</option>
+      <option value="+81" data-length="10">Japan (+81)</option>
+      <option value="+44" data-length="10">United Kingdom (+44)</option>
+      <option value="+61" data-length="9">Australia (+61)</option>
+    </select>
+
+    <input 
+      type="tel" 
+      id="mobile" 
+      name="mobile" 
+      placeholder="Enter your mobile number" 
+      pattern="[0-9]*" 
+      required
+    >
+    <span id="error-message"></span>
+
+    <br>
+    <button type="submit" onclick="validate()">Submit</button>
+  </form>
+
+  <script>
+    function validate(){
+        const countryCodeDropdown = document.getElementById('countryCode');
+        const allowedLength = countryCodeDropdown.selectedOptions[0].getAttribute('data-length');
+
+        const mobileInput = document.getElementById('mobile');
+
+        if(mobileInput.value.length != allowedLength){
+          alert("mobiel number should be "+allowedLength+" digits but enterd "+mobileInput.value.length+" digits");
+        }
+        
+        
+
+    }
+
+
+
+
+
+    // const countryCodeDropdown = document.getElementById('countryCode');
+    // const mobileInput = document.getElementById('mobile');
+    // const form = document.getElementById('mobileForm');
+    // const errorMessage = document.getElementById('error-message');
+
+    // // Update input rules based on selected country code
+    // function updateValidationRules() {
+    //     // alert(countryCodeDropdown.selectedOptions.value);
+    //     alert(countryCodeDropdown.selectedOptions[0].getAttribute('data-length'));
+    //   const selectedOption = countryCodeDropdown.selectedOptions[0];
+    //   const allowedLength = selectedOption.getAttribute('data-length');
+
+    //   // Update input attributes
+    //   mobileInput.maxLength = allowedLength;
+    //   mobileInput.minLength = allowedLength;
+    //   mobileInput.pattern = `\\d{${allowedLength}}`; // Only digits, exact length
+
+    //   // Clear error message
+    //   errorMessage.textContent = '';
+    // }
+
+    // // Validate on form submission
+    // form.addEventListener('submit', (event) => {
+    //   const mobileNumber = mobileInput.value;
+    //   const allowedLength = countryCodeDropdown.selectedOptions[0].getAttribute('data-length');
+
+    //   if (mobileNumber.length !== parseInt(allowedLength, 10)) {
+    //     event.preventDefault(); // Prevent form submission
+    //     errorMessage.textContent = `The mobile number must be exactly ${allowedLength} digits for the selected country code.`;
+    //     alert(errorMessage.textContent);
+    //   }
+    // });
+
+    // // Update rules on country code change
+    // countryCodeDropdown.addEventListener('change', updateValidationRules);
+
+    // // Initialize validation rules on page load
+    // updateValidationRules();
+  </script>
+</body>
+</html>
