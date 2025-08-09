@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Office Time Calculator</title>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
 <style>
-    body {
+  body {
     background-color: #121212;
     color: #e0e0e0;
     font-family: Arial, sans-serif;
@@ -18,263 +20,502 @@
     background-attachment: fixed;
     display: flex;
     justify-content: center;
-}
+  }
 
-.card {
+  .card {
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    padding: 20px;
+    padding: 0;
     width: 100%;
     max-width: 650px;
     backdrop-filter: blur(5px) brightness(1.1);
     border: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    margin: 40px 0; /* add vertical spacing so you can scroll fully */
-}
+    margin: 40px 0;
+  }
 
+  /* Tab headers container */
+  .tabs {
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+  }
 
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
+  /* Tab button style */
+  .tab-header {
+    background-color: rgba(98, 0, 234, 0.8);
+    padding: 12px 20px; /* reduced vertical padding */
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    color: #fff;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab-header:hover {
+    background-color: rgba(55, 0, 179, 0.8);
+  }
+  .tab-header.active {
+    background-color: rgba(55, 0, 179, 1);
+  }
 
-    input[type="number"], input[type="time"], button {
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #363636;
-        font-size: 16px;
-        width: 100%;
-        box-sizing: border-box;
-    }
+  /* Collapsible content */
+  .tab-content {
+    background-color: rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+  .tab-content.active {
+    padding-top: 10px; /* reduced padding */
+    padding-bottom: 10px;
+  }
 
-    input[type="number"], input[type="time"] {
-        background-color: #161616;
-        color: #fff;
-    }
+  /* Form group with consistent spacing */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
 
-    button {
-        background-color: #6200ea;
-        color: #fff;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        border: none;
-    }
+  input[type="number"], input[type="time"], button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #363636;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
 
-    button:hover {
-        background-color: #3700b3;
-    }
+  input[type="number"], input[type="time"] {
+    background-color: #161616;
+    color: #fff;
+  }
 
-    p {
-        font-size: 18px;
-        margin: 0;
-        color: #e0e0e0;
-    }
+  button {
+    background-color: #6200ea;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+  }
 
-    label {
-        color: #e0e0e0;
-    }
+  button:hover {
+    background-color: #3700b3;
+  }
 
-    .container {
-        background-color: rgba(30, 30, 30, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-    }
+  p, label {
+    color: #e0e0e0;
+    margin: 0;
+  }
 
-    pre {
-        background: black;
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
+  /* Container inside Auto Cal */
+  .container {
+    background-color: rgba(30, 30, 30, 0.8);
+    padding: 15px; /* reduced padding */
+    border-radius: 10px;
+  }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
+  /* Table styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px; /* reduced margin */
+  }
 
-    th, td {
-        border: 1px solid #444;
-        padding: 8px;
-        text-align: center;
-    }
+  th, td {
+    border: 1px solid #444;
+    padding: 6px 8px; /* reduced padding */
+    text-align: center;
+  }
 
-    th {
-        background-color: #333;
-    }
+  th {
+    background-color: #333;
+  }
 
-    tr:nth-child(even) {
-        background-color: #222;
-    }
+  tr:nth-child(even) {
+    background-color: #222;
+  }
+
+  /* Upload container */
+  #uploadContainer {
+    position: relative;
+    width: 150px;
+    height: 80px;
+    margin: 8px 0 12px 0; /* reduced margin */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  /* Upload icon + text */
+  #uploadLabel {
+    position: static;
+    background: none;
+    border-radius: 0;
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    pointer-events: auto;
+    user-select: none;
+  }
+
+  #uploadLabel input[type="file"] {
+    display: none;
+  }
+
+  #uploadLabel p {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  /* Spinner overlay */
+  #processingIcon {
+    position: static;
+    background: none;
+    border-radius: 0;
+    color: lightseagreen;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    user-select: none;
+    pointer-events: auto;
+    width: 100%;
+    white-space: nowrap; /* keep text on single line */
+  }
+
+  /* Visibility toggle */
+  .hidden {
+    display: none !important;
+  }
+
+  .visible {
+    display: flex !important;
+  }
 </style>
+
+<!-- FontAwesome for icon -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 
 <div class="card">
-    <!-- Work Hours Form -->
-    <div class="form-group">
-        <input type="number" placeholder="Monday" id="Monday">
-    </div>
-    <div class="form-group">
-        <input type="number" placeholder="Tuesday" id="Tuesday">
-    </div>
-    <div class="form-group">
-        <input type="number" placeholder="Wednesday" id="Wednesday">
-    </div>
-    <div class="form-group">
-        <input type="number" placeholder="Thursday" id="Thursday">
-    </div>
-    <div class="form-group">
-        <input type="number" placeholder="Friday" id="Friday">
-    </div>
-    <div class="form-group">
-        <label for="timeInput">Entry Time:</label>
-        <input type="time" id="timeInput" name="timeInput">
-    </div>
-    <div class="form-group">
-        <button onclick="calculate()">Calculate Exit Time</button>
-    </div>
-    <div class="form-group">
-        <p id="output"></p>
+
+  <div class="tabs">
+
+    <!-- Auto Cal Tab Header -->
+    <div class="tab-header active" tabindex="0" role="button" aria-expanded="true" aria-controls="autoCalContent" id="autoCalTab">
+      <i class="fa-solid fa-robot"></i> Auto Cal
     </div>
 
-    <!-- OCR + Table -->
-    <div class="container">
-        <h2>Office Time Calculator (Improved OCR)</h2>
-        <input type="file" id="imageUpload" accept="image/*">
-        <button onclick="processImage()">Extract & Calculate</button>
-        <h3>Extracted Text:</h3>
-        <pre id="extractedText"></pre>
+    <!-- Auto Cal Content -->
+    <div class="tab-content active" id="autoCalContent" role="region" aria-labelledby="autoCalTab">
+
+      <!-- Upload + Spinner Container -->
+      <div id="uploadContainer" tabindex="0" aria-label="Upload image" style="background: none;">
+        <!-- File Upload Icon + Text -->
+        <label for="imageUpload" id="uploadLabel" role="button" aria-pressed="false" tabindex="0">
+          <input type="file" id="imageUpload" accept="image/*" aria-describedby="uploadDescription" />
+          <i class="fa-solid fa-file-arrow-up fa-lg"></i>
+          <p>Upload Screenshot.</p> 
+        </label>
+
+        <!-- Spinning Gear + Text -->
+        <div id="processingIcon" aria-live="polite" aria-busy="true" class="hidden">
+          <i class="fa fa-gear fa-spin fa-2x"></i>
+          <span>Extracting Data ...</span>
+        </div>
+      </div>
+
+      <!-- Wrap heading + table inside container to toggle visibility -->
+      <div id="resultsContainer" style="display:none;">
         <h3>Calculated Table:</h3>
-        <table id="resultsTable">
+        <div class="container">
+          <table id="resultsTable" aria-live="polite" aria-relevant="all" aria-label="Calculated Time Table">
             <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>First Entry</th>
-                    <th>Last Exit</th>
-                    <th>Total Hours</th>
-                    <th>Hours (Decimal)</th>
-                </tr>
+              <tr>
+                <th>Date</th>
+                <th>Entry</th>
+                <th>Exit</th>
+                <th>Total</th>
+                <th>Hrs (Dec)</th>
+              </tr>
             </thead>
             <tbody></tbody>
-        </table>
+          </table>
+        </div>
+      </div>
+
     </div>
+
+    <!-- Manual Cal Tab Header -->
+    <div class="tab-header" tabindex="0" role="button" aria-expanded="false" aria-controls="manualCalContent" id="manualCalTab">
+      <i class="fa-solid fa-pencil"></i> Manual Cal
+    </div>
+
+    <!-- Manual Cal Content -->
+    <div class="tab-content" id="manualCalContent" role="region" aria-labelledby="manualCalTab">
+      <div class="form-group">
+        <input type="number" placeholder="Monday" id="Monday" />
+      </div>
+      <div class="form-group">
+        <input type="number" placeholder="Tuesday" id="Tuesday" />
+      </div>
+      <div class="form-group">
+        <input type="number" placeholder="Wednesday" id="Wednesday" />
+      </div>
+      <div class="form-group">
+        <input type="number" placeholder="Thursday" id="Thursday" />
+      </div>
+      <div class="form-group">
+        <input type="number" placeholder="Friday" id="Friday" />
+      </div>
+      <div class="form-group">
+        <label for="timeInput">Entry Time:</label>
+        <input type="time" id="timeInput" name="timeInput" />
+      </div>
+      <div class="form-group">
+        <button onclick="calculate()">Calculate Exit Time</button>
+      </div>
+      <div class="form-group">
+        <p id="output"></p>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- Tesseract OCR -->
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.5/dist/tesseract.min.js"></script>
 
 <script>
-    function weekTimeInMins() {
-        let mon = Number(document.getElementById('Monday').value) || 0;
-        let tue = Number(document.getElementById('Tuesday').value) || 0;
-        let wed = Number(document.getElementById('Wednesday').value) || 0;
-        let thu = Number(document.getElementById('Thursday').value) || 0;
-        let fri = Number(document.getElementById('Friday').value) || 0;
-        return (mon + tue + wed + thu + fri) * 60;
+  const tabHeaders = document.querySelectorAll('.tab-header');
+  const tabContents = document.querySelectorAll('.tab-content');
+  const resultsContainer = document.getElementById("resultsContainer");
+  const tbody = document.querySelector("#resultsTable tbody");
+
+  function closeAllTabs() {
+    tabHeaders.forEach(header => header.classList.remove('active'));
+    tabHeaders.forEach(header => header.setAttribute('aria-expanded', 'false'));
+    tabContents.forEach(content => {
+      content.classList.remove('active');
+      content.style.maxHeight = null;
+    });
+  }
+
+  function openTab(index) {
+    closeAllTabs();
+    const header = tabHeaders[index];
+    const content = tabContents[index];
+
+    header.classList.add('active');
+    header.setAttribute('aria-expanded', 'true');
+    content.classList.add('active');
+    
+    // Set max-height to scrollHeight for smooth expand animation
+    content.style.maxHeight = content.scrollHeight + 'px';
+  }
+
+  // Toggle tab on click or keyboard Enter/Space
+  tabHeaders.forEach((header, idx) => {
+    header.addEventListener('click', () => {
+      if (header.classList.contains('active')) {
+        // If already active, collapse it (optional, else keep one always open)
+        closeAllTabs();
+      } else {
+        openTab(idx);
+      }
+    });
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
+
+  // Open first tab initially
+  openTab(0);
+
+  // Calculate functions (Manual Cal)
+  function weekTimeInMins() {
+    let mon = Number(document.getElementById('Monday').value) || 0;
+    let tue = Number(document.getElementById('Tuesday').value) || 0;
+    let wed = Number(document.getElementById('Wednesday').value) || 0;
+    let thu = Number(document.getElementById('Thursday').value) || 0;
+    let fri = Number(document.getElementById('Friday').value) || 0;
+    return (mon + tue + wed + thu + fri) * 60;
+  }
+
+  function timeInHHMM(mins) {
+    let hrs = Math.trunc(mins / 60);
+    let min = mins % 60;
+    return [hrs, min.toString().padStart(2, "0")];
+  }
+
+  function calculate() {
+    let remainingtime = (45 * 60) - weekTimeInMins();
+    let friEntrytime = document.getElementById('timeInput').value;
+    if (!friEntrytime) {
+      document.getElementById('output').innerText = "Please enter Entry Time.";
+      return;
     }
+    let [frihrs, frimin] = friEntrytime.split(':').map(Number);
+    let totalTimeInMins = (remainingtime + (frihrs * 60) + frimin) - (12 * 60);
 
-    function timeInHHMM(mins) {
-        let hrs = Math.trunc(mins / 60);
-        let min = mins % 60;
-        return [hrs, min.toString().padStart(2, "0")];
+    let exitTime = timeInHHMM(totalTimeInMins);
+    let remingTime = timeInHHMM(remainingtime);
+    document.getElementById('output').innerText = 
+      "Exit time is " + exitTime[0] + ":" + exitTime[1] + " PM, you need to spend " + remingTime[0] + " hr " + remingTime[1] + " min in office";
+  }
+
+  // Helper: Fix OCR time format
+  function fixTimeFormat(timeStr) {
+    timeStr = timeStr.replace(/\./g, ":");
+    if (/^\d{3,4}$/.test(timeStr)) {
+      let hrs = timeStr.slice(0, timeStr.length - 2);
+      let mins = timeStr.slice(-2);
+      return hrs.padStart(2, "0") + ":" + mins;
     }
+    return timeStr;
+  }
 
-    function calculate() {
-        let remainingtime = (45 * 60) - weekTimeInMins();
-        let friEntrytime = document.getElementById('timeInput').value;
-        let [frihrs, frimin] = friEntrytime.split(':').map(Number);
-        let totalTimeInMins = (remainingtime + (frihrs * 60) + frimin) - (12 * 60);
-
-        let exitTime = timeInHHMM(totalTimeInMins);
-        let remingTime = timeInHHMM(remainingtime);
-        document.getElementById('output').innerText = 
-            "Exit time is " + exitTime[0] + ":" + exitTime[1] + " PM, you need to spend " + remingTime[0] + " hr " + remingTime[1] + " min in office";
-    }
-
-    function fixTimeFormat(timeStr) {
-        timeStr = timeStr.replace(/\./g, ":");
-        if (/^\d{3,4}$/.test(timeStr)) {
-            let hrs = timeStr.slice(0, timeStr.length - 2);
-            let mins = timeStr.slice(-2);
-            return hrs.padStart(2, "0") + ":" + mins;
-        }
-        return timeStr;
-    }
-
-    function calculateHours(start, end) {
+  // Calculate duration between two times (e.g. Entry & Exit)
+  function calculateHours(start, end) {
     let [sh, sm] = start.split(":").map(Number);
     let [eh, em] = end.split(":").map(Number);
     let startMins = sh * 60 + sm;
     let endMins = eh * 60 + em;
     let diff = endMins - startMins;
-    if (diff < 0) diff += 24 * 60; // Handle overnight cases
+    if (diff < 0) diff += 24 * 60;
     let hrs = Math.floor(diff / 60);
     let mins = diff % 60;
-    return { text: `${hrs}h ${mins}m`, minutes: diff }; // Return both
-}
+    return { text: `${hrs}h ${mins}m`, minutes: diff };
+  }
 
-    async function processImage() {
-        let file = document.getElementById("imageUpload").files[0];
-        if (!file) return alert("Please select an image!");
+  // Show / hide spinner and upload icon toggling
+  function showSpinner() {
+    document.getElementById("processingIcon").classList.remove("hidden");
+    document.getElementById("processingIcon").classList.add("visible");
+    document.getElementById("uploadLabel").classList.add("hidden");
+    document.getElementById("uploadLabel").classList.remove("visible");
+  }
 
-        document.getElementById("extractedText").textContent = "Processing...";
+  function hideSpinner() {
+    document.getElementById("processingIcon").classList.remove("visible");
+    document.getElementById("processingIcon").classList.add("hidden");
+    document.getElementById("uploadLabel").classList.remove("hidden");
+    document.getElementById("uploadLabel").classList.add("visible");
+  }
 
-        let result = await Tesseract.recognize(file, 'eng', {
-            logger: m => console.log(m)
-        });
+  // Update max-height of active tab content to fit content dynamically
+  function updateActiveContentHeight() {
+    tabContents.forEach(content => {
+      if (content.classList.contains('active')) {
+        content.style.maxHeight = 'none'; // reset to get true scrollHeight
+        let scrollHeight = content.scrollHeight;
+        content.style.maxHeight = scrollHeight + 'px';
+      }
+    });
+  }
 
-        let text = result.data.text;
-        document.getElementById("extractedText").textContent = text;
-        parseAndDisplay(text);
+  // OCR processing function
+  async function processImage() {
+    let fileInput = document.getElementById("imageUpload");
+    let file = fileInput.files[0];
+    if (!file) return;
+
+    showSpinner();
+
+    try {
+      let result = await Tesseract.recognize(file, 'eng', {
+        logger: m => console.log(m)
+      });
+
+      let text = result.data.text || "";
+      parseAndDisplay(text);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      hideSpinner();
+      fileInput.value = "";  // Reset to allow re-upload same file
     }
+  }
 
-    function parseAndDisplay(text) {
+  // Parse OCR text and fill table
+  function parseAndDisplay(text) {
     let lines = text.split("\n").map(l => l.trim()).filter(l => l);
     let dataByDate = {};
     let currentDate = null;
 
     lines.forEach(line => {
-        if (/^\w{3},/.test(line)) {
-            currentDate = line;
-            dataByDate[currentDate] = { entries: [], exits: [] };
+      if (/^\w{3},/.test(line)) {
+        currentDate = line;
+        dataByDate[currentDate] = { entries: [], exits: [] };
+      }
+      if (currentDate) {
+        if (/Entry/i.test(line)) {
+          let time = fixTimeFormat(line.split(" ")[0]);
+          dataByDate[currentDate].entries.push(time);
         }
-        if (currentDate) {
-            if (/Entry/i.test(line)) {
-                let time = fixTimeFormat(line.split(" ")[0]);
-                dataByDate[currentDate].entries.push(time);
-            }
-            if (/Exit/i.test(line)) {
-                let time = fixTimeFormat(line.split(" ")[0]);
-                dataByDate[currentDate].exits.push(time);
-            }
+        if (/Exit/i.test(line)) {
+          let time = fixTimeFormat(line.split(" ")[0]);
+          dataByDate[currentDate].exits.push(time);
         }
+      }
     });
 
-    let tbody = document.querySelector("#resultsTable tbody");
     tbody.innerHTML = "";
-    Object.keys(dataByDate).forEach(date => {
-        let firstEntry = dataByDate[date].entries[0] || "";
-        let lastExit = dataByDate[date].exits[dataByDate[date].exits.length - 1] || "";
-        let totalData = (firstEntry && lastExit) ? calculateHours(firstEntry, lastExit) : { text: "", minutes: 0 };
-        let decimalHours = totalData.minutes ? (totalData.minutes / 60).toFixed(2) : "";
-        
-        let row = `<tr>
-            <td>${date}</td>
-            <td>${firstEntry}</td>
-            <td>${lastExit}</td>
-            <td>${totalData.text}</td>
-            <td>${decimalHours}</td>
-        </tr>`;
-        tbody.innerHTML += row;
+
+    const dates = Object.keys(dataByDate);
+    if (dates.length === 0) {
+      resultsContainer.style.display = "none";  // hide entire container
+    } else {
+      resultsContainer.style.display = "block"; // show container
+    }
+
+    dates.forEach(date => {
+      let firstEntry = dataByDate[date].entries[0] || "";
+      let lastExit = dataByDate[date].exits[dataByDate[date].exits.length - 1] || "";
+      let totalData = (firstEntry && lastExit) ? calculateHours(firstEntry, lastExit) : { text: "", minutes: 0 };
+      let decimalHours = totalData.minutes ? (totalData.minutes / 60).toFixed(2) : "";
+
+      let row = `<tr>
+                  <td>${date}</td>
+                  <td>${firstEntry}</td>
+                  <td>${lastExit}</td>
+                  <td>${totalData.text}</td>
+                  <td>${decimalHours}</td>
+                </tr>`;
+      tbody.innerHTML += row;
     });
-}
+
+    updateActiveContentHeight();
+  }
+
+  document.getElementById("imageUpload").addEventListener("change", processImage);
+
+  // Initialize UI state
+  hideSpinner();
+  openTab(0); // open Auto Cal tab on load
 </script>
 
 </body>
