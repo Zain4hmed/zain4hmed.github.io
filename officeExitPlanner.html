@@ -55,6 +55,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    user-select: none;
   }
   .tab-header:hover {
     background-color: rgba(55, 0, 179, 0.8);
@@ -68,11 +69,13 @@
     background-color: rgba(255, 255, 255, 0.05);
     overflow: hidden;
     max-height: 0;
-    transition: max-height 0.5s ease;
+    transition: max-height 0.5s ease, padding 0.3s ease;
     padding: 0 20px;
     box-sizing: border-box;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
+    position: relative;
+    z-index: 2;
   }
   .tab-content.active {
     padding-top: 10px; /* reduced padding */
@@ -146,22 +149,22 @@
     background-color: #222;
   }
 
-  /* Upload container */
+  /* Upload container - center contents horizontally and vertically */
   #uploadContainer {
     position: relative;
     width: 150px;
     height: 80px;
-    margin: 8px 0 12px 0; /* reduced margin */
+    margin: 12px auto 12px auto; /* equal vertical margin, auto horizontal */
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center; /* center horizontally */
     gap: 8px;
+    flex-direction: column; /* stack vertically */
   }
 
   /* Upload icon + text */
   #uploadLabel {
-    position: static;
     background: none;
     border-radius: 0;
     font-size: 14px;
@@ -169,7 +172,6 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    width: 100%;
     pointer-events: auto;
     user-select: none;
   }
@@ -185,12 +187,11 @@
 
   /* Spinner overlay */
   #processingIcon {
-    position: static;
     background: none;
     border-radius: 0;
     color: lightseagreen;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center; /* center horizontally */
     align-items: center;
     gap: 8px;
     font-weight: 600;
@@ -208,6 +209,21 @@
 
   .visible {
     display: flex !important;
+  }
+
+  /* Note below Manual Cal tab content */
+  #manualCalNote {
+    padding: 12px 20px;
+    font-style: italic;
+    font-size: 14px;
+    color: #aaa;
+    background-color: rgba(30, 30, 30, 0.6);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    margin-top: 4px;
+    z-index: 1;
+    position: relative;
+    user-select: none;
   }
 </style>
 
@@ -230,7 +246,7 @@
     <div class="tab-content active" id="autoCalContent" role="region" aria-labelledby="autoCalTab">
 
       <!-- Upload + Spinner Container -->
-      <div id="uploadContainer" tabindex="0" aria-label="Upload image" style="background: none;">
+      <div id="uploadContainer" tabindex="0" aria-label="Upload image">
         <!-- File Upload Icon + Text -->
         <label for="imageUpload" id="uploadLabel" role="button" aria-pressed="false" tabindex="0">
           <input type="file" id="imageUpload" accept="image/*" aria-describedby="uploadDescription" />
@@ -300,6 +316,11 @@
       </div>
     </div>
 
+    <!-- Note below manual tab content -->
+    <div id="manualCalNote" aria-live="polite">
+      Upload a screenshot from the time tracker form the Vibe app to calculate the exit times.
+    </div>
+
   </div>
 </div>
 
@@ -311,49 +332,64 @@
   const tabContents = document.querySelectorAll('.tab-content');
   const resultsContainer = document.getElementById("resultsContainer");
   const tbody = document.querySelector("#resultsTable tbody");
+  const manualCalNote = document.getElementById("manualCalNote");
+  const autoCalTabHeader = document.getElementById("autoCalTab");
+  const manualCalTabHeader = document.getElementById("manualCalTab");
+  const autoCalContent = document.getElementById("autoCalContent");
+  const manualCalContent = document.getElementById("manualCalContent");
 
-  function closeAllTabs() {
-    tabHeaders.forEach(header => header.classList.remove('active'));
-    tabHeaders.forEach(header => header.setAttribute('aria-expanded', 'false'));
-    tabContents.forEach(content => {
-      content.classList.remove('active');
-      content.style.maxHeight = null;
-    });
-  }
-
-  function openTab(index) {
-    closeAllTabs();
+  // Toggle single tab independently (accordion style)
+  function toggleTab(index) {
     const header = tabHeaders[index];
     const content = tabContents[index];
+    const isActive = header.classList.contains('active');
 
-    header.classList.add('active');
-    header.setAttribute('aria-expanded', 'true');
-    content.classList.add('active');
-    
-    // Set max-height to scrollHeight for smooth expand animation
-    content.style.maxHeight = content.scrollHeight + 'px';
+    if (isActive) {
+      // Close tab
+      header.classList.remove('active');
+      header.setAttribute('aria-expanded', 'false');
+      content.classList.remove('active');
+      content.style.maxHeight = null;
+    } else {
+      // Open tab
+      header.classList.add('active');
+      header.setAttribute('aria-expanded', 'true');
+      content.classList.add('active');
+      content.style.maxHeight = content.scrollHeight + 'px';
+    }
+
+    // Show note only when Manual Cal tab is closed
+    const manualOpen = manualCalTabHeader.classList.contains('active');
+    if (!manualOpen) {
+      manualCalNote.style.display = "block";
+    } else {
+      manualCalNote.style.display = "none";
+    }
   }
 
-  // Toggle tab on click or keyboard Enter/Space
+  // Setup event listeners on tab headers
   tabHeaders.forEach((header, idx) => {
-    header.addEventListener('click', () => {
-      if (header.classList.contains('active')) {
-        // If already active, collapse it (optional, else keep one always open)
-        closeAllTabs();
-      } else {
-        openTab(idx);
-      }
-    });
+    header.addEventListener('click', () => toggleTab(idx));
     header.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        header.click();
+        toggleTab(idx);
       }
     });
   });
 
-  // Open first tab initially
-  openTab(0);
+  // Initialize: Auto Cal open, Manual Cal closed, note visible
+  autoCalTabHeader.classList.add('active');
+  autoCalTabHeader.setAttribute('aria-expanded', 'true');
+  autoCalContent.classList.add('active');
+  autoCalContent.style.maxHeight = autoCalContent.scrollHeight + 'px';
+
+  manualCalTabHeader.classList.remove('active');
+  manualCalTabHeader.setAttribute('aria-expanded', 'false');
+  manualCalContent.classList.remove('active');
+  manualCalContent.style.maxHeight = null;
+
+  manualCalNote.style.display = "block";
 
   // Calculate functions (Manual Cal)
   function weekTimeInMins() {
@@ -424,17 +460,6 @@
     document.getElementById("processingIcon").classList.add("hidden");
     document.getElementById("uploadLabel").classList.remove("hidden");
     document.getElementById("uploadLabel").classList.add("visible");
-  }
-
-  // Update max-height of active tab content to fit content dynamically
-  function updateActiveContentHeight() {
-    tabContents.forEach(content => {
-      if (content.classList.contains('active')) {
-        content.style.maxHeight = 'none'; // reset to get true scrollHeight
-        let scrollHeight = content.scrollHeight;
-        content.style.maxHeight = scrollHeight + 'px';
-      }
-    });
   }
 
   // OCR processing function
@@ -508,14 +533,16 @@
       tbody.innerHTML += row;
     });
 
-    updateActiveContentHeight();
+    // Update max-height in case table expands
+    if (autoCalContent.classList.contains('active')) {
+      autoCalContent.style.maxHeight = autoCalContent.scrollHeight + 'px';
+    }
   }
 
   document.getElementById("imageUpload").addEventListener("change", processImage);
 
   // Initialize UI state
   hideSpinner();
-  openTab(0); // open Auto Cal tab on load
 </script>
 
 </body>
