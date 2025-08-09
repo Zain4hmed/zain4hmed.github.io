@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    
     <style>
+        
         body {
             background-color: #121212;
             color: #e0e0e0;
@@ -108,8 +110,69 @@
             <button onclick="calculate()">Calculate Exit Time</button>
         </div>
         <div class="form-group">
-            <p id="output"></p>
+            <p id="output1"></p>
         </div>
+
+
+        <h1>Extract Text from Image (Enhanced)</h1>
+  <input type="file" id="imageInput" accept="image/*" />
+  <p><strong>Extracted Text:</strong></p>
+  <p id="output"></p>
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const output = document.getElementById('output');
+
+    imageInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        preprocessImage(file, processedBlob => {
+          Tesseract.recognize(
+            processedBlob,
+            'eng',
+            { logger: info => console.log(info) }
+          ).then(({ data: { text } }) => {
+            output.textContent = text || "No text found.";
+          });
+        });
+      }
+    });
+
+    function preprocessImage(file, callback) {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = e => {
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          // Draw original image
+          ctx.drawImage(img, 0, 0);
+
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+
+          // Convert to grayscale & apply threshold
+          for (let i = 0; i < data.length; i += 4) {
+            const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+            const threshold = avg > 150 ? 255 : 0; // Adjust 150 for sensitivity
+            data[i] = data[i + 1] = data[i + 2] = threshold;
+          }
+
+          ctx.putImageData(imageData, 0, 0);
+
+          canvas.toBlob(callback);
+        };
+        img.src = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
+    }
+  </script>
     </div>
 
     <script>
@@ -141,8 +204,11 @@
 
             let exitTime = timeInHHMM(totalTimeInMins);
             let remingTime = timeInHHMM(remainingtime);
-            document.getElementById('output').innerText = "Exit time is " + exitTime[0] + ":" + exitTime[1] + " PM , you need to spend " + remingTime[0] + " hr and " + remingTime[1] + " min in office";
+            document.getElementById('output1').innerText = "Exit time is " + exitTime[0] + ":" + exitTime[1] + " PM , you need to spend " + remingTime[0] + " hr and " + remingTime[1] + " min in office";
         }
     </script>
+
+
+
 </body>
 </html>
