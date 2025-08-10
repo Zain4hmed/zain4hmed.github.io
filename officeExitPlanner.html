@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Office Time Calculator</title>
+<title>Office Time Calculator (OCR.space)</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
@@ -324,9 +324,7 @@
   </div>
 </div>
 
-<!-- Tesseract OCR -->
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.5/dist/tesseract.min.js"></script>
-
+<!-- NOTE: switched from client-side Tesseract.js to OCR.space API -->
 <script>
   const tabHeaders = document.querySelectorAll('.tab-header');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -431,11 +429,15 @@
       let mins = timeStr.slice(-2);
       return hrs.padStart(2, "0") + ":" + mins;
     }
+    // if already contains colon or other format, try to normalize
+    let m = timeStr.match(/(\d{1,2})[:\.]?(\d{2})/);
+    if (m) return m[1].padStart(2, '0') + ':' + m[2];
     return timeStr;
   }
 
   // Calculate duration between two times (e.g. Entry & Exit)
   function calculateHours(start, end) {
+    if (!start || !end) return { text: "", minutes: 0 };
     let [sh, sm] = start.split(":").map(Number);
     let [eh, em] = end.split(":").map(Number);
     let startMins = sh * 60 + sm;
@@ -462,7 +464,7 @@
     document.getElementById("uploadLabel").classList.add("visible");
   }
 
-  // OCR processing function
+  // OCR.space processing function
   async function processImage() {
     let fileInput = document.getElementById("imageUpload");
     let file = fileInput.files[0];
@@ -471,14 +473,39 @@
     showSpinner();
 
     try {
-      let result = await Tesseract.recognize(file, 'eng', {
-        logger: m => console.log(m)
+      const form = new FormData();
+
+      // TODO: Replace the placeholder below with your real API key before using.
+      const OCR_SPACE_API_KEY = 'PASTE_YOUR_OCR_SPACE_API_KEY_HERE';
+
+      // OCR.space supports sending the apikey either as a form field or a header.
+      form.append('apikey', "K85932712188957");
+      form.append('language', 'eng');
+      form.append('isOverlayRequired', 'false');
+      form.append('file', file);
+
+      const resp = await fetch('https://api.ocr.space/parse/image', {
+        method: 'POST',
+        body: form
       });
 
-      let text = result.data.text || "";
-      parseAndDisplay(text);
+      if (!resp.ok) {
+        throw new Error('OCR API request failed with status ' + resp.status);
+      }
+
+      const json = await resp.json();
+
+      if (json && json.ParsedResults && json.ParsedResults.length > 0) {
+        const parsedText = json.ParsedResults.map(r => r.ParsedText).join('\n') || '';
+        parseAndDisplay(parsedText);
+      } else {
+        console.warn('No parsed results from OCR.space', json);
+        parseAndDisplay('');
+      }
+
     } catch (err) {
-      console.error(err);
+      console.error('OCR error:', err);
+      alert('OCR failed: ' + (err.message || err));
     } finally {
       hideSpinner();
       fileInput.value = "";  // Reset to allow re-upload same file
@@ -491,19 +518,40 @@
     let dataByDate = {};
     let currentDate = null;
 
+    // Heuristic parsing: look for date-like lines or weekday names (Mon, Tue..)
     lines.forEach(line => {
-      if (/^\w{3},/.test(line)) {
+      // If line looks like "Mon, 01 Jan" or starts with weekday short name
+      if (/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\b/i.test(line) || /^\w{3},/.test(line)) {
         currentDate = line;
         dataByDate[currentDate] = { entries: [], exits: [] };
+        return;
       }
-      if (currentDate) {
-        if (/Entry/i.test(line)) {
-          let time = fixTimeFormat(line.split(" ")[0]);
-          dataByDate[currentDate].entries.push(time);
-        }
-        if (/Exit/i.test(line)) {
-          let time = fixTimeFormat(line.split(" ")[0]);
-          dataByDate[currentDate].exits.push(time);
+
+      // look for patterns like "Entry 09:15" or "09:15 Entry"
+      let entryMatch = line.match(/Entry\D*(\d{1,2}[:\.]?\d{2})/i) || line.match(/(\d{1,2}[:\.]?\d{2})\D*Entry/i);
+      let exitMatch = line.match(/Exit\D*(\d{1,2}[:\.]?\d{2})/i) || line.match(/(\d{1,2}[:\.]?\d{2})\D*Exit/i);
+
+      // Also try to grab times even if the words Entry/Exit are missing, using position-based heuristics
+      let timeOnlyMatch = line.match(/(\d{1,2}[:\.]?\d{2})/g);
+
+      if (entryMatch && currentDate) {
+        let time = fixTimeFormat(entryMatch[1]);
+        dataByDate[currentDate].entries.push(time);
+      } else if (exitMatch && currentDate) {
+        let time = fixTimeFormat(exitMatch[1]);
+        dataByDate[currentDate].exits.push(time);
+      } else if (timeOnlyMatch && currentDate) {
+        // If there are two times in a line assume first is entry second is exit
+        if (timeOnlyMatch.length >= 2) {
+          let t1 = fixTimeFormat(timeOnlyMatch[0]);
+          let t2 = fixTimeFormat(timeOnlyMatch[1]);
+          dataByDate[currentDate].entries.push(t1);
+          dataByDate[currentDate].exits.push(t2);
+        } else {
+          // Single time — push to entries if entries empty, else to exits
+          let t = fixTimeFormat(timeOnlyMatch[0]);
+          if (dataByDate[currentDate].entries.length === 0) dataByDate[currentDate].entries.push(t);
+          else dataByDate[currentDate].exits.push(t);
         }
       }
     });
