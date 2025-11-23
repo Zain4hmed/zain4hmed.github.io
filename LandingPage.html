@@ -16,6 +16,7 @@
       --bg:#f5f7f6;
       --card-shadow: 0 12px 30px rgba(6,56,47,0.08);
       --glass: rgba(255,255,255,0.72);
+      --header-height:72px;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -27,11 +28,12 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       line-height:1.5;
+      -webkit-font-kerning: normal;
     }
 
     /* ---------- Header ---------- */
     header{
-      position:fixed;left:0;right:0;top:0;height:72px;
+      position:fixed;left:0;right:0;top:0;height:var(--header-height);
       display:flex;align-items:center;justify-content:space-between;padding:10px 6%;
       background:linear-gradient(180deg, rgba(6,56,47,0.96), rgba(6,56,47,0.92));
       color:#fff;z-index:1200;backdrop-filter:blur(4px);
@@ -43,82 +45,51 @@
       background:linear-gradient(135deg,var(--gold),#ffd87a);color:var(--deep);
       font-family:'Playfair Display', serif;font-weight:700;font-size:20px;
       box-shadow:0 6px 18px rgba(6,56,47,0.12);
+      flex-shrink:0;
     }
+    nav{display:flex;align-items:center;gap:6px}
     nav a{color:#fff;text-decoration:none;margin-left:18px;font-weight:600;opacity:.96}
     nav a:hover{color:var(--gold)}
 
-    /* ---------- Hero ---------- */
-    .hero{
-      min-height:76vh;padding-top:92px;padding-bottom:36px;display:flex;align-items:center;gap:36px;padding-left:6%;padding-right:6%;
-      background-image: linear-gradient(rgba(6,56,47,0.60), rgba(6,56,47,0.44)), url('https://images.unsplash.com/photo-1515165562835-c60ae4ebd8f1?auto=format&w=1600&q=60');
-      background-size:cover;background-position:center;border-bottom-left-radius:28px;border-bottom-right-radius:28px;color:#fff;margin-bottom:18px;
+    /* Mobile nav toggle (keeps content same but adds responsive control) */
+    .nav-toggle{
+      display:none;
+      background:transparent;border:0;color:#fff;font-size:22px;cursor:pointer;
+    }
+    .nav-inner{display:flex;align-items:center;gap:10px}
+    .nav-collapsed{display:none}
+
+    /* ---------- Hero (CLEAN + FINAL VERSION) ---------- */
+    .hero {
+      background: url('https://images.unsplash.com/photo-1593115057322-e94b77572f20?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+      padding: 120px 8% 100px;
+      min-height: 80vh;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+      color: #fff;
+      margin-top: calc(var(--header-height) * 0.1);
     }
 
-    /* Updated Hero Section */
-.hero {
-  background: url('https://images.unsplash.com/photo-1593115057322-e94b77572f20?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
-  padding: 100px 8%;
-  min-height: 80vh;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #ffffff;
-  position: relative;
-}
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 20, 40, 0.55);
+      backdrop-filter: blur(1px);
+      z-index: 0;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+    }
 
-/* Add a dark overlay for better text readability */
-.hero::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(10, 20, 40, 0.55);
-  backdrop-filter: blur(1px);
-  z-index: 0;
-}
-
-.hero-left,
-.hero-right {
-  position: relative;
-  z-index: 1;
-}
-
-/* Right Side Stat Cards Styling */
-.hero-right {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.stat-card {
-  background: rgba(255, 255, 255, 0.12);
-  padding: 18px;
-  border-radius: 10px;
-  width: 280px;
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  transition: transform 0.3s ease;
-}
-
-.stat-card:hover {
-  transform: translateY(-6px);
-}
-
-/* Responsive Behavior */
-@media(max-width: 900px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
-  }
-  .hero-right {
-    margin-top: 20px;
-    width: 100%;
-    align-items: center;
-  }
-}
-
+    .hero-left,
+    .hero-right {
+      position: relative;
+      z-index: 2;
+    }
 
     .hero-left{max-width:760px}
     .hero h1{
@@ -126,19 +97,38 @@
       line-height:1.05;
     }
     .hero p{opacity:.95;color:rgba(255,255,255,0.94);font-size:1.05rem;margin-bottom:18px}
-    .cta{display:inline-flex;gap:12px;align-items:center}
+    .cta{display:inline-flex;gap:12px;align-items:center;flex-wrap:wrap}
     .btn{
       background:var(--gold);color:var(--deep);padding:12px 18px;border-radius:10px;font-weight:700;text-decoration:none;box-shadow:0 8px 22px rgba(212,175,55,0.12)
     }
     .btn.alt{background:transparent;border:2px solid rgba(255,255,255,0.14);color:#fff}
 
-    .hero-right{width:360px;display:grid;gap:14px}
-    .stat-card{background:rgba(255,255,255,0.06);padding:14px;border-radius:12px;backdrop-filter:blur(6px);box-shadow:0 10px 28px rgba(6,56,47,0.12)}
+    /* Right Side Stat Cards Styling */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 360px;
+      align-items: flex-end;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 14px;
+      border-radius: 12px;
+      backdrop-filter: blur(6px);
+      box-shadow:0 10px 28px rgba(6,56,47,0.12);
+      border: 1px solid rgba(255,255,255,0.06);
+      width: 100%;
+      max-width: 360px;
+    }
     .stat-card h3{font-size:16px;margin-bottom:6px}
     .stat-card p{opacity:.9;color:rgba(255,255,255,0.92);font-size:14px}
 
+    .stat-card:hover{transform:translateY(-6px);transition:transform .28s}
+
     /* ---------- Main container ---------- */
-    main{margin:0 auto}
+    main{margin:0 auto; padding-top: 20px;}
 
     section{padding:64px 6%}
 
@@ -204,22 +194,53 @@
 
     /* ---------- Footer ---------- */
     footer{padding:36px 6%;background:linear-gradient(180deg,var(--deep), #04362f);color:#fff;margin-top:40px}
-    footer .foot-grid{display:flex;gap:24px;align-items:center;justify-content:space-between}
+    footer .foot-grid{display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap}
     footer a{color:var(--gold);text-decoration:none}
 
     /* ---------- Responsive ---------- */
+    @media (max-width:1100px){
+      .hero{padding:100px 6% 80px}
+      .hero h1{font-size:40px}
+      .hero-left{max-width:640px}
+    }
+
     @media (max-width:980px){
-      .hero{flex-direction:column;padding:110px 6% 40px}
-      .hero-right{width:100%}
+      header{padding:8px 5%}
+      .nav-toggle{display:inline-block}
+      nav a{display:none}
+      .nav-collapsed{display:flex;flex-direction:column;position:fixed;top:var(--header-height);right:0;background:linear-gradient(180deg, rgba(6,56,47,0.98), rgba(6,56,47,0.95));padding:12px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.2)}
+      .nav-collapsed a{display:block;margin:8px 0;color:#fff}
+      .hero{flex-direction:column;padding:110px 6% 40px;min-height:64vh}
+      .hero-right{width:100%;align-items:center;margin-top:28px}
       .timeline-wrapper{flex-direction:column}
       .timeline-line{display:none}
       .contact-grid{grid-template-columns:1fr}
     }
-    @media (max-width:560px){
-      .hero h1{font-size:28px}
+
+    @media (max-width:720px){
+      .hero h1{font-size:34px}
       .hero p{font-size:15px}
+      .stat-card{max-width:420px}
+      .leaders-grid{gap:16px}
     }
 
+    @media (max-width:560px){
+      body{font-size:15px}
+      header{height:64px}
+      .logo{width:42px;height:42px;font-size:18px}
+      .hero{padding:80px 5% 56px}
+      .hero h1{font-size:28px}
+      .hero p{font-size:14px}
+      .modal-grid{grid-template-columns:1fr;gap:12px}
+      .modal-grid img{width:100%;height:auto;max-height:320px}
+      .modal-card{padding:14px}
+      .contact-grid{padding-bottom:24px}
+      footer .foot-grid{flex-direction:column;align-items:flex-start;gap:12px}
+    }
+
+    /* small visual tweaks to keep original look but consistent on small screens */
+    a.btn{display:inline-block}
+    .leader .meta{box-shadow:var(--card-shadow)}
   </style>
 </head>
 <body>
@@ -234,17 +255,23 @@
       </div>
     </div>
 
-    <nav>
-      <a href="#hero">Home</a>
-      <a href="#history">History</a>
-      <a href="#leadership">Leadership</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <div class="nav-inner">
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-label="Toggle navigation">☰</button>
+      <nav id="mainNav">
+        <a href="#hero">Home</a>
+        <a href="#history">History</a>
+        <a href="#leadership">Leadership</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+
+    <!-- collapsed nav container (shown on small screens via JS) -->
+    <div id="collapsedNav" class="nav-collapsed" style="display:none"></div>
   </header>
 
   <!-- Hero -->
   <main>
-    <section class="hero" id="hero">
+    <section class="hero" id="hero" role="region" aria-label="Main hero">
       <div class="hero-left">
         <h1>Vijayawada Advocates Association</h1>
         <p>Upholding justice, strengthening the profession, and serving the community. Annual elected leadership brings accountability, growth, and direction to our association.</p>
@@ -286,7 +313,7 @@
 
         <div class="timeline">
           <div class="timeline-item">
-            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="founding"></div>
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0" alt="founding"></div>
             <div class="body">
               <h4>1980 — Founding of the Association</h4>
               <p>A group of local advocates formed the Vijayawada Advocates Association to represent legal professionals and protect their interests within the district court.</p>
@@ -294,7 +321,7 @@
           </div>
 
           <div class="timeline-item">
-            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="legal-aid"></div>
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0" alt="legal-aid"></div>
             <div class="body">
               <h4>1992 — Community Legal Aid Started</h4>
               <p>Initiated free legal aid clinics to help underserved citizens and expanded outreach with partner NGOs.</p>
@@ -302,7 +329,7 @@
           </div>
 
           <div class="timeline-item">
-            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="mentorship"></div>
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0" alt="mentorship"></div>
             <div class="body">
               <h4>2001 — Mentorship & CLE Program</h4>
               <p>Introduced continuing legal education workshops and mentorship for junior advocates to improve professional standards.</p>
@@ -310,7 +337,7 @@
           </div>
 
           <div class="timeline-item">
-            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="digital-upgrade"></div>
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0" alt="digital-upgrade"></div>
             <div class="body">
               <h4>2015 — Digitisation & Library Upgrade</h4>
               <p>Upgraded the association library with e-resources and ran workshops on digital filing and courtroom tech.</p>
@@ -318,7 +345,7 @@
           </div>
 
           <div class="timeline-item">
-            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="outreach"></div>
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0" alt="outreach"></div>
             <div class="body">
               <h4>2023 — Expanded Outreach</h4>
               <p>Scaled legal literacy campaigning in schools and colleges and increased pro bono hours across the member base.</p>
@@ -334,7 +361,7 @@
       <h2>Leadership — Office Bearers (2025)</h2>
       <div class="lead-sub">Click any card to view the full profile. The President (first card) has an extended profile and additional contact link.</div>
 
-      <div class="leaders-grid" id="leaders"></div>
+      <div class="leaders-grid" id="leaders" aria-live="polite"></div>
     </section>
 
     <!-- CONTACT -->
@@ -345,7 +372,7 @@
         <div>
           <p style="color:var(--muted);margin-bottom:12px">For membership, events, press, or collaboration — use the form or directly contact the office below.</p>
 
-          <div style="display:flex;gap:12px;margin-bottom:18px">
+          <div style="display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap">
             <div style="background:#fff;padding:12px;border-radius:10px;min-width:160px;box-shadow:var(--card-shadow)">
               <strong>Email</strong>
               <div style="color:var(--muted);margin-top:8px">info@vaa.org.in</div>
@@ -357,20 +384,17 @@
             </div>
           </div>
 
-          
-           <!-- Contact form -->
-        <form id="contactForm" onsubmit="return submitForm(event)">
-          <div class="field"><label for="name">Name</label><input id="name" name="name" required placeholder="Your full name"></div>
-          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required placeholder="you@domain.com"></div>
-          <div class="field"><label for="subject">Subject</label><input id="subject" name="subject" placeholder="Membership / Event / Other"></div>
-          <div class="field"><label for="message">Message</label><textarea id="message" name="message" placeholder="Write your message..." required></textarea></div>
+          <!-- Contact form -->
+          <form id="contactForm" onsubmit="return submitForm(event)">
+            <div class="field"><label for="name">Name</label><input id="name" name="name" required placeholder="Your full name"></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required placeholder="you@domain.com"></div>
+            <div class="field"><label for="subject">Subject</label><input id="subject" name="subject" placeholder="Membership / Event / Other"></div>
+            <div class="field"><label for="message">Message</label><textarea id="message" name="message" placeholder="Write your message..." required></textarea></div>
 
-          <button type="submit" class="btn">Send Message</button>
-          <div class="form-note">This demo form shows a preview. To actually send emails, integrate Formspree / Netlify Forms or a backend.</div>
-        </form>
+            <button type="submit" class="btn">Send Message</button>
+            <div class="form-note">This demo form shows a preview. To actually send emails, integrate Formspree / Netlify Forms or a backend.</div>
+          </form>
         </div>
-
-       
       </div>
     </section>
 
@@ -404,21 +428,21 @@
   <script>
     // ---------- Leaders data ----------
     const leaders = [
-      {id:1, name:'Adv. Prakash Rao', role:'President', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Chief strategist and the primary face of the association. Oversees governance, public representation, and strategic planning. Chairs the annual general meeting and election committee. Responsible for major partnerships and outreach.', responsibilities:['Oversee operations','Lead AGMs','Represent association publicly','Set strategic priorities'], email:'prakash.rao@vaa.org.in'},
-      {id:2, name:'Adv. Sneha Reddy', role:'Vice President', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Assists the President and coordinates committees and member welfare.', responsibilities:['Support Presidency','Coordinate committees'], email:'sneha.reddy@vaa.org.in'},
-      {id:3, name:'Adv. Imran Khan', role:'General Secretary', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Manages communication, notices and internal records, publishes circulars and maintains minutes.', responsibilities:['Maintain records','Circulate notices','Manage membership data'], email:'imran.khan@vaa.org.in'},
-      {id:4, name:'Adv. Kiran Patnaik', role:'Joint Secretary', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Supports secretariat functions and member services, including grievance coordination.', responsibilities:['Assist Secretariat','Member grievances'], email:'kiran.patnaik@vaa.org.in'},
-      {id:5, name:'Adv. Priya Singh', role:'Treasurer', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Oversees association finances, budgeting and reporting with transparency.', responsibilities:['Maintain accounts','Annual budget','Financial reporting'], email:'priya.singh@vaa.org.in'},
-      {id:6, name:'Adv. Pawan Gowda', role:'Legal Affairs Head', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Coordinates legal panels and continuing legal education (CLE) sessions.', responsibilities:['Organize CLEs','Legal panels'], email:'pawan.gowda@vaa.org.in'},
-      {id:7, name:'Adv. Lakshmi Devi', role:'Ethics & Welfare', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Leads welfare schemes, pensions & ethical oversight.', responsibilities:['Welfare programs','Ethics oversight'], email:'lakshmi.devi@vaa.org.in'},
-      {id:8, name:'Adv. Sanjay Rao', role:'Court Relations', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Liaison with court administration for schedules and hearings.', responsibilities:['Court liaison','Scheduling matters'], email:'sanjay.rao@vaa.org.in'},
-      {id:9, name:'Adv. Anita Thomas', role:'Disciplinary Committee', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Heads disciplinary reviews ensuring fairness and due process.', responsibilities:['Handle complaints','Disciplinary proceedings'], email:'anita.thomas@vaa.org.in'},
-      {id:10, name:'Adv. Manoj Sharma', role:'Public Relations', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Manages press, media relations and public communications.', responsibilities:['Press statements','Media coordination'], email:'manoj.sharma@vaa.org.in'},
-      {id:11, name:'Adv. Neha Kapoor', role:'Technology & IT', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', responsibilities:['Manage website','Digital training'], email:'neha.kapoor@vaa.org.in'},
-      {id:12, name:'Adv. Chaitanya', role:'Membership Handling', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Handles membership enrollment, records, and renewals.', responsibilities:['Membership records','Enrollment'], email:'chaitanya@vaa.org.in'},
-      {id:13, name:'Adv. Harika Varma', role:'Advocacy & Outreach', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Runs public advocacy campaigns and outreach programs.', responsibilities:['Outreach programs','Advocacy campaigns'], email:'harika.varma@vaa.org.in'},
-      {id:14, name:'Adv. Aravind', role:'Research & Policy', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Conducts legal research and drafts policy recommendations.', responsibilities:['Policy research','Draft papers'], email:'aravind@vaa.org.in'},
-      {id:15, name:'Adv. Suhas', role:'Training & Education', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Organizes training programs for juniors and court interns.', responsibilities:['Training programs','Intern coordination'], email:'suhas@vaa.org.in'}
+      {id:1, name:'Adv. Prakash Rao', role:'President', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Chief strategist and the primary face of the association. Oversees governance, public representation, and strategic planning. Chairs the annual general meeting and election committee. Responsible for major partnerships and outreach.', responsibilities:['Oversee operations','Lead AGMs','Represent association publicly','Set strategic priorities'], email:'prakash.rao@vaa.org.in'},
+      {id:2, name:'Adv. Sneha Reddy', role:'Vice President', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Assists the President and coordinates committees and member welfare.', responsibilities:['Support Presidency','Coordinate committees'], email:'sneha.reddy@vaa.org.in'},
+      {id:3, name:'Adv. Imran Khan', role:'General Secretary', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Manages communication, notices and internal records, publishes circulars and maintains minutes.', responsibilities:['Maintain records','Circulate notices','Manage membership data'], email:'imran.khan@vaa.org.in'},
+      {id:4, name:'Adv. Kiran Patnaik', role:'Joint Secretary', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Supports secretariat functions and member services, including grievance coordination.', responsibilities:['Assist Secretariat','Member grievances'], email:'kiran.patnaik@vaa.org.in'},
+      {id:5, name:'Adv. Priya Singh', role:'Treasurer', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Oversees association finances, budgeting and reporting with transparency.', responsibilities:['Maintain accounts','Annual budget','Financial reporting'], email:'priya.singh@vaa.org.in'},
+      {id:6, name:'Adv. Pawan Gowda', role:'Legal Affairs Head', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Coordinates legal panels and continuing legal education (CLE) sessions.', responsibilities:['Organize CLEs','Legal panels'], email:'pawan.gowda@vaa.org.in'},
+      {id:7, name:'Adv. Lakshmi Devi', role:'Ethics & Welfare', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Leads welfare schemes, pensions & ethical oversight.', responsibilities:['Welfare programs','Ethics oversight'], email:'lakshmi.devi@vaa.org.in'},
+      {id:8, name:'Adv. Sanjay Rao', role:'Court Relations', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Liaison with court administration for schedules and hearings.', responsibilities:['Court liaison','Scheduling matters'], email:'sanjay.rao@vaa.org.in'},
+      {id:9, name:'Adv. Anita Thomas', role:'Disciplinary Committee', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Heads disciplinary reviews ensuring fairness and due process.', responsibilities:['Handle complaints','Disciplinary proceedings'], email:'anita.thomas@vaa.org.in'},
+      {id:10, name:'Adv. Manoj Sharma', role:'Public Relations', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Manages press, media relations and public communications.', responsibilities:['Press statements','Media coordination'], email:'manoj.sharma@vaa.org.in'},
+      {id:11, name:'Adv. Neha Kapoor', role:'Technology & IT', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', responsibilities:['Manage website','Digital training'], email:'neha.kapoor@vaa.org.in'},
+      {id:12, name:'Adv. Chaitanya', role:'Membership Handling', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Handles membership enrollment, records, and renewals.', responsibilities:['Membership records','Enrollment'], email:'chaitanya@vaa.org.in'},
+      {id:13, name:'Adv. Harika Varma', role:'Advocacy & Outreach', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Runs public advocacy campaigns and outreach programs.', responsibilities:['Outreach programs','Advocacy campaigns'], email:'harika.varma@vaa.org.in'},
+      {id:14, name:'Adv. Aravind', role:'Research & Policy', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Conducts legal research and drafts policy recommendations.', responsibilities:['Policy research','Draft papers'], email:'aravind@vaa.org.in'},
+      {id:15, name:'Adv. Suhas', role:'Training & Education', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0', bio:'Organizes training programs for juniors and court interns.', responsibilities:['Training programs','Intern coordination'], email:'suhas@vaa.org.in'}
     ];
 
     // ---------- Render leaders ----------
@@ -427,16 +451,17 @@
     function makeLeaderCard(l, index){
       const el = document.createElement('div');
       el.className = 'leader' + (index===0 ? ' first' : '');
+      const bioText = l.bio ? l.bio : '';
       el.innerHTML = `
-        <div class="photo"><img src="${l.img}" alt="${l.name}"></div>
+        <div class="photo"><img src="${l.img}" alt="${l.name}" loading="lazy"></div>
         <h4>${l.name}</h4>
         <p>${l.role}</p>
 
-        <div class="meta">
-          <small><strong>About:</strong> ${escapeHtml(l.bio.slice(0,110))}...</small>
+        <div class="meta" aria-hidden="true">
+          <small><strong>About:</strong> ${escapeHtml((bioText).slice(0,110))}${bioText.length>110 ? '...' : ''}</small>
           <div class="actions">
             <span class="pill" data-id="${l.id}" onclick="openModal(event, ${l.id})">View Profile</span>
-            <span class="pill" onclick="mailtoLeader('${encodeURIComponent(l.email)}')">Email</span>
+            <span class="pill" onclick="mailtoLeader('${encodeURIComponent(l.email || '')}')">Email</span>
           </div>
         </div>
       `;
@@ -451,7 +476,7 @@
     }
 
     function escapeHtml(text){
-      return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      return String(text || '').replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
     }
 
     leaders.forEach((l, i)=> leadersContainer.appendChild(makeLeaderCard(l,i)));
@@ -469,19 +494,21 @@
         <img src="${person.img}" alt="${person.name}">
         <div>
           <h3 id="modalTitle">${person.name}</h3>
-          <div style="color:var(--muted);margin-bottom:12px"><em>${person.role}</em></div>
-          <p>${escapeHtml(person.bio)}</p>
+          <div style="color:var(--muted);margin-bottom:12px"><em>${person.role || ''}</em></div>
+          <p>${escapeHtml(person.bio || 'Profile information not available.')}</p>
           <div style="margin-top:10px"><strong>Key responsibilities</strong>
-            <ul>${person.responsibilities.map(r=>`<li>${escapeHtml(r)}</li>`).join('')}</ul>
+            <ul>${(person.responsibilities || []).map(r=>`<li>${escapeHtml(r)}</li>`).join('')}</ul>
           </div>
-          <div style="margin-top:12px;display:flex;gap:10px">
-            <a class="btn" href="mailto:${person.email}?subject=${encodeURIComponent('Contact: '+person.name)}">Email ${person.name.split(' ')[1]||person.name}</a>
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn" href="mailto:${person.email || ''}?subject=${encodeURIComponent('Contact: '+person.name)}">Email ${person.name.split(' ')[1]||person.name}</a>
             <button class="pill" onclick="closeModalFn()" style="border:none;background:transparent">Close</button>
           </div>
         </div>
       `;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden','false');
+      // trap focus briefly (simple)
+      closeModal.focus();
     }
 
     function closeModalFn(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
@@ -490,7 +517,12 @@
 
     // mailto helper for meta pill
     function mailtoLeader(encodedEmail){
-      window.location.href = `mailto:${decodeURIComponent(encodedEmail)}?subject=${encodeURIComponent('Inquiry from VAA Website')}`;
+      const email = decodeURIComponent(encodedEmail || '');
+      if(!email) {
+        alert('Email not provided.');
+        return;
+      }
+      window.location.href = `mailto:${email}?subject=${encodeURIComponent('Inquiry from VAA Website')}`;
     }
 
     // ---------- Contact form (demo only) ----------
@@ -517,6 +549,46 @@
 
     // ---------- Accessibility: close modal on ESC ----------
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModalFn(); });
+
+    // ---------- Mobile nav toggle ----------
+    (function(){
+      const navToggle = document.getElementById('navToggle');
+      const collapsedNav = document.getElementById('collapsedNav');
+      const mainNav = document.getElementById('mainNav');
+      // populate collapsed nav with the same links (keeps everything same)
+      function cloneNav(){
+        collapsedNav.innerHTML = '';
+        Array.from(mainNav.querySelectorAll('a')).forEach(a=>{
+          const link = a.cloneNode(true);
+          link.addEventListener('click', ()=> {
+            // close menu after click
+            collapsedNav.style.display = 'none';
+            navToggle.setAttribute('aria-expanded','false');
+          });
+          collapsedNav.appendChild(link);
+        });
+      }
+      cloneNav();
+
+      navToggle.addEventListener('click', function(){
+        const isOpen = collapsedNav.style.display === 'flex';
+        if(isOpen){
+          collapsedNav.style.display = 'none';
+          navToggle.setAttribute('aria-expanded','false');
+        }else{
+          collapsedNav.style.display = 'flex';
+          navToggle.setAttribute('aria-expanded','true');
+        }
+      });
+
+      // close collapsed nav on resize to desktop
+      window.addEventListener('resize', ()=> {
+        if(window.innerWidth > 980){
+          collapsedNav.style.display = 'none';
+          navToggle.setAttribute('aria-expanded','false');
+        }
+      });
+    })();
 
   </script>
 </body>
