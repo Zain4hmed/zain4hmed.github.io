@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vijayawada Advocates Association — Modern</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --deep:#06382f;
+      --gold:#d4af37;
+      --muted:#6c6c6c;
+      --bg:#f5f7f6;
+      --card-shadow: 0 12px 30px rgba(6,56,47,0.08);
+      --glass: rgba(255,255,255,0.72);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#fbfdfc 0%, var(--bg) 100%);
+      color:#122;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+    }
+
+    /* ---------- Header ---------- */
+    header{
+      position:fixed;left:0;right:0;top:0;height:72px;
+      display:flex;align-items:center;justify-content:space-between;padding:10px 6%;
+      background:linear-gradient(180deg, rgba(6,56,47,0.96), rgba(6,56,47,0.92));
+      color:#fff;z-index:1200;backdrop-filter:blur(4px);
+      box-shadow:0 8px 24px rgba(6,56,47,0.12);
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{
+      width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,var(--gold),#ffd87a);color:var(--deep);
+      font-family:'Playfair Display', serif;font-weight:700;font-size:20px;
+      box-shadow:0 6px 18px rgba(6,56,47,0.12);
+    }
+    nav a{color:#fff;text-decoration:none;margin-left:18px;font-weight:600;opacity:.96}
+    nav a:hover{color:var(--gold)}
+
+    /* ---------- Hero ---------- */
+    .hero{
+      min-height:76vh;padding-top:92px;padding-bottom:36px;display:flex;align-items:center;gap:36px;padding-left:6%;padding-right:6%;
+      background-image: linear-gradient(rgba(6,56,47,0.60), rgba(6,56,47,0.44)), url('https://images.unsplash.com/photo-1515165562835-c60ae4ebd8f1?auto=format&w=1600&q=60');
+      background-size:cover;background-position:center;border-bottom-left-radius:28px;border-bottom-right-radius:28px;color:#fff;margin-bottom:18px;
+    }
+
+    /* Updated Hero Section */
+.hero {
+  background: url('https://images.unsplash.com/photo-1593115057322-e94b77572f20?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+  padding: 100px 8%;
+  min-height: 80vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  position: relative;
+}
+
+/* Add a dark overlay for better text readability */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 20, 40, 0.55);
+  backdrop-filter: blur(1px);
+  z-index: 0;
+}
+
+.hero-left,
+.hero-right {
+  position: relative;
+  z-index: 1;
+}
+
+/* Right Side Stat Cards Styling */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 18px;
+  border-radius: 10px;
+  width: 280px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Responsive Behavior */
+@media(max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hero-right {
+    margin-top: 20px;
+    width: 100%;
+    align-items: center;
+  }
+}
+
+
+    .hero-left{max-width:760px}
+    .hero h1{
+      font-family:'Playfair Display', serif;font-weight:700;font-size:44px;margin-bottom:8px;letter-spacing:0.2px;
+      line-height:1.05;
+    }
+    .hero p{opacity:.95;color:rgba(255,255,255,0.94);font-size:1.05rem;margin-bottom:18px}
+    .cta{display:inline-flex;gap:12px;align-items:center}
+    .btn{
+      background:var(--gold);color:var(--deep);padding:12px 18px;border-radius:10px;font-weight:700;text-decoration:none;box-shadow:0 8px 22px rgba(212,175,55,0.12)
+    }
+    .btn.alt{background:transparent;border:2px solid rgba(255,255,255,0.14);color:#fff}
+
+    .hero-right{width:360px;display:grid;gap:14px}
+    .stat-card{background:rgba(255,255,255,0.06);padding:14px;border-radius:12px;backdrop-filter:blur(6px);box-shadow:0 10px 28px rgba(6,56,47,0.12)}
+    .stat-card h3{font-size:16px;margin-bottom:6px}
+    .stat-card p{opacity:.9;color:rgba(255,255,255,0.92);font-size:14px}
+
+    /* ---------- Main container ---------- */
+    main{margin:0 auto}
+
+    section{padding:64px 6%}
+
+    h2{
+      font-family:'Playfair Display', serif;font-size:26px;color:var(--deep);margin-bottom:18px;
+    }
+    .lead-sub{color:var(--muted);margin-bottom:20px}
+
+    /* ---------- Timeline ---------- */
+    .timeline-wrapper{display:flex;gap:28px;align-items:flex-start}
+    .timeline-line{width:84px;display:flex;flex-direction:column;align-items:center;gap:12px}
+    .timeline-line .dot{width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:0 6px 16px rgba(212,175,55,0.18)}
+    .timeline-line .line{width:3px;background:linear-gradient(180deg,var(--gold), rgba(212,175,55,0.6));flex:1;border-radius:2px;opacity:.95}
+
+    .timeline{display:grid;gap:18px;flex:1}
+    .timeline-item{display:flex;gap:18px;align-items:flex-start;background:var(--glass);padding:16px;border-radius:12px;box-shadow:var(--card-shadow)}
+    .timeline-item .thumb{width:140px;min-width:140px;height:96px;border-radius:10px;overflow:hidden}
+    .timeline-item .thumb img{width:100%;height:100%;object-fit:cover}
+    .timeline-item .body h4{font-family:'Playfair Display', serif;color:var(--deep);font-size:16px}
+    .timeline-item .body p{color:var(--muted);margin-top:8px;font-size:14px}
+
+    /* ---------- Leaders grid ---------- */
+    .leaders-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+    .leader{
+      background:linear-gradient(180deg,#fff, rgba(245,246,245,0.98));padding:18px;border-radius:14px;box-shadow:var(--card-shadow);
+      position:relative;overflow:hidden;cursor:pointer;transition:transform .28s, box-shadow .28s;
+    }
+    .leader:hover{transform:translateY(-8px);box-shadow:0 18px 46px rgba(6,56,47,0.12)}
+    .leader .photo{width:96px;height:96px;border-radius:50%;overflow:hidden;border:3px solid var(--gold);margin:0 auto}
+    .leader .photo img{width:100%;height:100%;object-fit:cover}
+    .leader h4{font-family:'Playfair Display', serif;text-align:center;margin-top:12px;color:var(--deep);font-size:18px}
+    .leader p{opacity:.82;text-align:center;margin-top:6px;color:var(--muted);font-size:14px}
+
+    /* sliding meta on hover */
+    .leader .meta{position:absolute;left:0;right:0;bottom:-220px;background:linear-gradient(180deg,#fff, rgba(245,246,245,0.98));padding:18px;border-top:1px solid rgba(0,0,0,0.04);transition:bottom .32s}
+    .leader:hover .meta{bottom:0}
+    .meta small{display:block;color:var(--muted);margin-bottom:10px}
+    .actions{display:flex;gap:10px;justify-content:center}
+    .pill{padding:8px 12px;border-radius:999px;background:rgba(6,56,47,0.04);border:1px solid rgba(6,56,47,0.06);font-weight:700;color:var(--deep);cursor:pointer}
+
+    /* highlight first leader */
+    .leader.first{border:2px solid var(--gold);box-shadow:0 20px 60px rgba(212,175,55,0.08)}
+    .leader.first h4{color:var(--deep);}
+
+    /* ---------- Modal ---------- */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:1500;opacity:0;pointer-events:none;transition:opacity .18s}
+    .modal.open{opacity:1;pointer-events:auto}
+    .modal-card{width:100%;max-width:900px;background:#fff;border-radius:12px;padding:20px;box-shadow:0 30px 80px rgba(6,56,47,0.18)}
+    .modal-grid{display:grid;grid-template-columns:180px 1fr;gap:18px}
+    .modal-grid img{width:180px;height:180px;object-fit:cover;border-radius:10px}
+    .modal h3{font-family:'Playfair Display', serif;margin-bottom:6px}
+    .modal p{color:var(--muted);margin-bottom:10px}
+    .modal ul{color:var(--muted);margin-top:8px}
+
+    /* ---------- Contact ---------- */
+    .contact-grid{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start}
+    form{background:#fff;padding:18px;border-radius:12px;box-shadow:var(--card-shadow)}
+    .field{display:flex;flex-direction:column;margin-bottom:12px}
+    .field label{font-weight:600;margin-bottom:6px}
+    .field input,.field textarea{padding:12px;border-radius:8px;border:1px solid #e9e9e9;font-size:14px}
+    .field textarea{min-height:140px;resize:vertical}
+    .form-note{font-size:13px;color:var(--muted);margin-top:8px}
+
+    /* ---------- Footer ---------- */
+    footer{padding:36px 6%;background:linear-gradient(180deg,var(--deep), #04362f);color:#fff;margin-top:40px}
+    footer .foot-grid{display:flex;gap:24px;align-items:center;justify-content:space-between}
+    footer a{color:var(--gold);text-decoration:none}
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:980px){
+      .hero{flex-direction:column;padding:110px 6% 40px}
+      .hero-right{width:100%}
+      .timeline-wrapper{flex-direction:column}
+      .timeline-line{display:none}
+      .contact-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      .hero h1{font-size:28px}
+      .hero p{font-size:15px}
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true">V</div>
+      <div>
+        <div style="font-size:14px;font-weight:700">Vijayawada Advocates</div>
+        <div style="font-size:12px;opacity:.85">Association • Since 1980</div>
+      </div>
+    </div>
+
+    <nav>
+      <a href="#hero">Home</a>
+      <a href="#history">History</a>
+      <a href="#leadership">Leadership</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-left">
+        <h1>Vijayawada Advocates Association</h1>
+        <p>Upholding justice, strengthening the profession, and serving the community. Annual elected leadership brings accountability, growth, and direction to our association.</p>
+
+        <div class="cta" style="margin-top:18px">
+          <a class="btn" href="#leadership">Meet the Office Bearers</a>
+          <a class="btn alt" href="#history" style="margin-left:8px">Our Journey</a>
+        </div>
+      </div>
+
+      <aside class="hero-right" aria-hidden="true">
+        <div class="stat-card">
+          <h3>15 Elected Positions</h3>
+          <p>Transparent elections each year to choose leadership for the association.</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Four Decades of Service</h3>
+          <p>Legal aid, education, and community programs since 1980.</p>
+        </div>
+
+        <div class="stat-card">
+          <h3>Active Outreach</h3>
+          <p>Legal literacy, pro bono clinics, and student mentorship programs.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="history">
+      <h2>History & Timeline</h2>
+      <div class="lead-sub">A brief timeline of milestones and initiatives that shaped our association.</div>
+
+      <div class="timeline-wrapper">
+        <div class="timeline-line" aria-hidden="true">
+          <div class="dot"></div>
+          <div class="line"></div>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="founding"></div>
+            <div class="body">
+              <h4>1980 — Founding of the Association</h4>
+              <p>A group of local advocates formed the Vijayawada Advocates Association to represent legal professionals and protect their interests within the district court.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="legal-aid"></div>
+            <div class="body">
+              <h4>1992 — Community Legal Aid Started</h4>
+              <p>Initiated free legal aid clinics to help underserved citizens and expanded outreach with partner NGOs.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="mentorship"></div>
+            <div class="body">
+              <h4>2001 — Mentorship & CLE Program</h4>
+              <p>Introduced continuing legal education workshops and mentorship for junior advocates to improve professional standards.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="digital-upgrade"></div>
+            <div class="body">
+              <h4>2015 — Digitisation & Library Upgrade</h4>
+              <p>Upgraded the association library with e-resources and ran workshops on digital filing and courtroom tech.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="outreach"></div>
+            <div class="body">
+              <h4>2023 — Expanded Outreach</h4>
+              <p>Scaled legal literacy campaigning in schools and colleges and increased pro bono hours across the member base.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERSHIP -->
+    <section id="leadership">
+      <h2>Leadership — Office Bearers (2025)</h2>
+      <div class="lead-sub">Click any card to view the full profile. The President (first card) has an extended profile and additional contact link.</div>
+
+      <div class="leaders-grid" id="leaders"></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact & Reach Us</h2>
+
+      <div class="contact-grid">
+        <div>
+          <p style="color:var(--muted);margin-bottom:12px">For membership, events, press, or collaboration — use the form or directly contact the office below.</p>
+
+          <div style="display:flex;gap:12px;margin-bottom:18px">
+            <div style="background:#fff;padding:12px;border-radius:10px;min-width:160px;box-shadow:var(--card-shadow)">
+              <strong>Email</strong>
+              <div style="color:var(--muted);margin-top:8px">info@vaa.org.in</div>
+            </div>
+
+            <div style="background:#fff;padding:12px;border-radius:10px;box-shadow:var(--card-shadow)">
+              <strong>Phone</strong>
+              <div style="color:var(--muted);margin-top:8px">+91 98765 43210</div>
+            </div>
+          </div>
+
+          
+           <!-- Contact form -->
+        <form id="contactForm" onsubmit="return submitForm(event)">
+          <div class="field"><label for="name">Name</label><input id="name" name="name" required placeholder="Your full name"></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required placeholder="you@domain.com"></div>
+          <div class="field"><label for="subject">Subject</label><input id="subject" name="subject" placeholder="Membership / Event / Other"></div>
+          <div class="field"><label for="message">Message</label><textarea id="message" name="message" placeholder="Write your message..." required></textarea></div>
+
+          <button type="submit" class="btn">Send Message</button>
+          <div class="form-note">This demo form shows a preview. To actually send emails, integrate Formspree / Netlify Forms or a backend.</div>
+        </form>
+        </div>
+
+       
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="foot-grid">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div class="logo" style="width:62px;height:62px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#ffd87a);display:flex;align-items:center;justify-content:center;color:var(--deep);font-family:'Playfair Display';font-weight:700">V</div>
+          <div>
+            <div style="font-weight:700">Vijayawada Advocates Association</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.85)">District Court Road, Vijayawada • © 2025</div>
+          </div>
+        </div>
+
+        <div style="text-align:right">
+          <div style="margin-bottom:8px"><a href="#history">History</a> • <a href="#leadership">Leadership</a> • <a href="#contact">Contact</a></div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.85);margin-top:6px">Designed & Developed by You</div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div style="display:flex;justify-content:flex-end"><button id="closeModal" style="background:transparent;border:none;font-weight:700;font-size:18px;cursor:pointer">✕</button></div>
+      <div class="modal-grid" id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Leaders data ----------
+    const leaders = [
+      {id:1, name:'Adv. Prakash Rao', role:'President', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Chief strategist and the primary face of the association. Oversees governance, public representation, and strategic planning. Chairs the annual general meeting and election committee. Responsible for major partnerships and outreach.', responsibilities:['Oversee operations','Lead AGMs','Represent association publicly','Set strategic priorities'], email:'prakash.rao@vaa.org.in'},
+      {id:2, name:'Adv. Sneha Reddy', role:'Vice President', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Assists the President and coordinates committees and member welfare.', responsibilities:['Support Presidency','Coordinate committees'], email:'sneha.reddy@vaa.org.in'},
+      {id:3, name:'Adv. Imran Khan', role:'General Secretary', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Manages communication, notices and internal records, publishes circulars and maintains minutes.', responsibilities:['Maintain records','Circulate notices','Manage membership data'], email:'imran.khan@vaa.org.in'},
+      {id:4, name:'Adv. Kiran Patnaik', role:'Joint Secretary', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Supports secretariat functions and member services, including grievance coordination.', responsibilities:['Assist Secretariat','Member grievances'], email:'kiran.patnaik@vaa.org.in'},
+      {id:5, name:'Adv. Priya Singh', role:'Treasurer', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Oversees association finances, budgeting and reporting with transparency.', responsibilities:['Maintain accounts','Annual budget','Financial reporting'], email:'priya.singh@vaa.org.in'},
+      {id:6, name:'Adv. Pawan Gowda', role:'Legal Affairs Head', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Coordinates legal panels and continuing legal education (CLE) sessions.', responsibilities:['Organize CLEs','Legal panels'], email:'pawan.gowda@vaa.org.in'},
+      {id:7, name:'Adv. Lakshmi Devi', role:'Ethics & Welfare', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Leads welfare schemes, pensions & ethical oversight.', responsibilities:['Welfare programs','Ethics oversight'], email:'lakshmi.devi@vaa.org.in'},
+      {id:8, name:'Adv. Sanjay Rao', role:'Court Relations', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Liaison with court administration for schedules and hearings.', responsibilities:['Court liaison','Scheduling matters'], email:'sanjay.rao@vaa.org.in'},
+      {id:9, name:'Adv. Anita Thomas', role:'Disciplinary Committee', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Heads disciplinary reviews ensuring fairness and due process.', responsibilities:['Handle complaints','Disciplinary proceedings'], email:'anita.thomas@vaa.org.in'},
+      {id:10, name:'Adv. Manoj Sharma', role:'Public Relations', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Manages press, media relations and public communications.', responsibilities:['Press statements','Media coordination'], email:'manoj.sharma@vaa.org.in'},
+      {id:11, name:'Adv. Neha Kapoor', role:'Technology & IT', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', responsibilities:['Manage website','Digital training'], email:'neha.kapoor@vaa.org.in'},
+      {id:12, name:'Adv. Chaitanya', role:'Membership Handling', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Handles membership enrollment, records, and renewals.', responsibilities:['Membership records','Enrollment'], email:'chaitanya@vaa.org.in'},
+      {id:13, name:'Adv. Harika Varma', role:'Advocacy & Outreach', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Runs public advocacy campaigns and outreach programs.', responsibilities:['Outreach programs','Advocacy campaigns'], email:'harika.varma@vaa.org.in'},
+      {id:14, name:'Adv. Aravind', role:'Research & Policy', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Conducts legal research and drafts policy recommendations.', responsibilities:['Policy research','Draft papers'], email:'aravind@vaa.org.in'},
+      {id:15, name:'Adv. Suhas', role:'Training & Education', img:'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', bio:'Organizes training programs for juniors and court interns.', responsibilities:['Training programs','Intern coordination'], email:'suhas@vaa.org.in'}
+    ];
+
+    // ---------- Render leaders ----------
+    const leadersContainer = document.getElementById('leaders');
+
+    function makeLeaderCard(l, index){
+      const el = document.createElement('div');
+      el.className = 'leader' + (index===0 ? ' first' : '');
+      el.innerHTML = `
+        <div class="photo"><img src="${l.img}" alt="${l.name}"></div>
+        <h4>${l.name}</h4>
+        <p>${l.role}</p>
+
+        <div class="meta">
+          <small><strong>About:</strong> ${escapeHtml(l.bio.slice(0,110))}...</small>
+          <div class="actions">
+            <span class="pill" data-id="${l.id}" onclick="openModal(event, ${l.id})">View Profile</span>
+            <span class="pill" onclick="mailtoLeader('${encodeURIComponent(l.email)}')">Email</span>
+          </div>
+        </div>
+      `;
+
+      // clicking card opens modal (but don't trigger when clicking inner pill)
+      el.addEventListener('click', (e)=>{
+        if(e.target.classList.contains('pill')) return;
+        openModal(null, l.id);
+      });
+
+      return el;
+    }
+
+    function escapeHtml(text){
+      return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+
+    leaders.forEach((l, i)=> leadersContainer.appendChild(makeLeaderCard(l,i)));
+
+    // ---------- Modal logic ----------
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modalContent');
+    const closeModal = document.getElementById('closeModal');
+
+    function openModal(e, id){
+      if(e) e.stopPropagation();
+      const person = leaders.find(x=>x.id===id);
+      if(!person) return;
+      modalContent.innerHTML = `
+        <img src="${person.img}" alt="${person.name}">
+        <div>
+          <h3 id="modalTitle">${person.name}</h3>
+          <div style="color:var(--muted);margin-bottom:12px"><em>${person.role}</em></div>
+          <p>${escapeHtml(person.bio)}</p>
+          <div style="margin-top:10px"><strong>Key responsibilities</strong>
+            <ul>${person.responsibilities.map(r=>`<li>${escapeHtml(r)}</li>`).join('')}</ul>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:10px">
+            <a class="btn" href="mailto:${person.email}?subject=${encodeURIComponent('Contact: '+person.name)}">Email ${person.name.split(' ')[1]||person.name}</a>
+            <button class="pill" onclick="closeModalFn()" style="border:none;background:transparent">Close</button>
+          </div>
+        </div>
+      `;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+    }
+
+    function closeModalFn(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
+    closeModal.addEventListener('click', closeModalFn);
+    modal.addEventListener('click',(e)=>{ if(e.target===modal) closeModalFn(); });
+
+    // mailto helper for meta pill
+    function mailtoLeader(encodedEmail){
+      window.location.href = `mailto:${decodeURIComponent(encodedEmail)}?subject=${encodeURIComponent('Inquiry from VAA Website')}`;
+    }
+
+    // ---------- Contact form (demo only) ----------
+    function submitForm(e){
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        subject: form.subject.value.trim(),
+        message: form.message.value.trim()
+      };
+      if(!data.name || !data.email || !data.message){
+        alert('Please fill name, email and message.');
+        return false;
+      }
+
+      // preview popup (demo). Replace with API call or form provider when implementing.
+      const preview = `Message preview:\n\nFrom: ${data.name} <${data.email}>\nSubject: ${data.subject}\n\n${data.message}`;
+      alert(preview);
+      form.reset();
+      return false;
+    }
+
+    // ---------- Accessibility: close modal on ESC ----------
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModalFn(); });
+
+  </script>
+</body>
+</html>
