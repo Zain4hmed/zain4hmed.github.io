@@ -271,11 +271,11 @@ body::after { position: fixed; z-index: 5; inset: 0; content: ""; pointer-events
 body { position: relative; isolation: isolate; }
 body::before { z-index: 0; }
 .ambient-lights { position: fixed; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
-.light-beam { position: absolute; left: -18vw; width: 136vw; height: 2px; border-radius: 50%; opacity: .34; filter: blur(12px); transform: rotate(-18deg); }
+.light-beam { position: absolute; left: -18vw; width: 136vw; height: 2px; border-radius: 50%; opacity: .52; filter: blur(12px); transform: rotate(-18deg); }
 .light-beam::after { position: absolute; inset: -40px 0; content: ""; background: inherit; filter: blur(45px); }
-.beam-cyan { top: 19%; background: linear-gradient(90deg, transparent, rgba(99,245,210,.7) 31%, rgba(99,245,210,.16) 59%, transparent); animation: beam-oscillation 18s ease-in-out infinite alternate; }
-.beam-violet { top: 66%; opacity: .28; background: linear-gradient(90deg, transparent, rgba(174,140,255,.68) 27%, rgba(174,140,255,.13) 62%, transparent); animation: beam-oscillation-violet 23s ease-in-out infinite alternate; }
-.beam-white { top: 43%; height: 1px; opacity: .18; filter: blur(3px); background: linear-gradient(90deg, transparent, rgba(214,245,255,.8) 48%, transparent); animation: beam-oscillation-white 15s ease-in-out infinite alternate; }
+.beam-cyan { top: 19%; background: linear-gradient(90deg, transparent, rgba(99,245,210,.9) 31%, rgba(99,245,210,.2) 59%, transparent); animation: beam-oscillation 14s ease-in-out infinite alternate, neon-hue 12s linear infinite; }
+.beam-violet { top: 66%; opacity: .43; background: linear-gradient(90deg, transparent, rgba(174,140,255,.88) 27%, rgba(174,140,255,.2) 62%, transparent); animation: beam-oscillation-violet 17s ease-in-out infinite alternate, neon-hue 16s linear infinite reverse; }
+.beam-white { top: 43%; height: 1px; opacity: .32; filter: blur(3px); background: linear-gradient(90deg, transparent, rgba(214,245,255,.9) 48%, transparent); animation: beam-oscillation-white 11s ease-in-out infinite alternate, neon-hue-white 9s linear infinite; }
 .site-shell { position: relative; z-index: 1; isolation: isolate; }
 .site-shell::before { position: absolute; z-index: -1; inset: 0; content: ""; pointer-events: none; border-right: 1px solid rgba(170,186,217,.1); border-left: 1px solid rgba(170,186,217,.1); background: rgba(11,14,24,.2); box-shadow: 0 0 100px rgba(0,0,0,.11); backdrop-filter: blur(20px) saturate(135%); }
 :root[data-theme="light"] .site-shell::before { background: rgba(244,248,255,.42); border-color: rgba(53,73,101,.1); box-shadow: 0 0 100px rgba(60,82,115,.1); }
@@ -307,6 +307,8 @@ body::before { z-index: 0; }
 @keyframes beam-oscillation { to { transform: translate3d(13vw, 13vh, 0) rotate(-11deg); opacity: .48; } }
 @keyframes beam-oscillation-violet { to { transform: translate3d(-11vw, -11vh, 0) rotate(-24deg); opacity: .4; } }
 @keyframes beam-oscillation-white { to { transform: translate3d(7vw, -8vh, 0) rotate(-15deg); opacity: .27; } }
+@keyframes neon-hue { to { filter: blur(12px) hue-rotate(360deg) saturate(1.45); } }
+@keyframes neon-hue-white { to { filter: blur(3px) hue-rotate(360deg) saturate(1.5); } }
 @keyframes glass-sweep { to { transform: translateX(50%); } }
 @media (max-width: 650px) {
 	.site-shell::before { backdrop-filter: blur(14px) saturate(125%); }
