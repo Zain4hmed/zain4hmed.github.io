@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+	<div class="ambient-lights" aria-hidden="true"><span class="light-beam beam-cyan"></span><span class="light-beam beam-violet"></span><span class="light-beam beam-white"></span></div>
 	<div class="site-shell">
 		<header class="topbar">
 			<a class="brand" href="#home" aria-label="Zain Ahmed home"><span class="brand-mark">Z<span>.</span></span><span class="brand-name">ZAIN AHMED</span></a>
@@ -94,14 +95,14 @@
 			</section>
 		</main>
 
-		<footer class="footer section-wrap"><a class="brand" href="#home"><span class="brand-mark">Z<span>.</span></span><span class="brand-name">ZAIN AHMED</span></a><p>DESIGNED & BUILT WITH CURIOSITY <span>© 2026</span></p><a class="back-top" href="#home">BACK TO TOP ↑</a></footer>
+		<footer class="footer section-wrap"><a class="brand" href="#home"><span class="brand-mark">Z<span>.</span></span><span class="brand-name">ZAIN AHMED</span></a><p>DESIGNED & BUILT WITH CURIOSITY <span>© 2026</span></p><a class="icon-credit" href="https://fontawesome.com/license/free" target="_blank" rel="noopener noreferrer">ICONS: FONT AWESOME FREE</a><a class="back-top" href="#home">BACK TO TOP ↑</a></footer>
 	</div>
 	<script>
 		(() => {
 			const root = document.documentElement;
 			const sizeButtons = [...document.querySelectorAll('[data-text-size]')];
 			const themeButton = document.querySelector('.theme-toggle');
-			const sizes = { small: '0.92', default: '1', large: '1.12' };
+			const sizes = { small: '0.92', default: '1.12', large: '1.28' };
 
 			function setTextSize(size) {
 				const value = sizes[size] ? size : 'default';
