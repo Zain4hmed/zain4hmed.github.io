@@ -13,7 +13,15 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-	<div class="ambient-lights" aria-hidden="true"><span class="light-beam beam-cyan"></span><span class="light-beam beam-violet"></span><span class="light-beam beam-white"></span></div>
+	<div class="ambient-lights" aria-hidden="true">
+		<svg class="infinity-beam" viewBox="0 0 1200 600" role="presentation">
+			<defs><linearGradient id="infinity-neon" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#63f5d2"/><stop offset=".48" stop-color="#ae8cff"/><stop offset="1" stop-color="#ff54b8"/></linearGradient></defs>
+			<path class="infinity-halo" d="M600 300 C400 50 100 150 100 300 C100 450 400 550 600 300 C800 50 1100 150 1100 300 C1100 450 800 550 600 300"/>
+			<path class="infinity-core" d="M600 300 C400 50 100 150 100 300 C100 450 400 550 600 300 C800 50 1100 150 1100 300 C1100 450 800 550 600 300"/>
+			<circle class="infinity-particle" r="6"><animateMotion dur="8s" repeatCount="indefinite" path="M600 300 C400 50 100 150 100 300 C100 450 400 550 600 300 C800 50 1100 150 1100 300 C1100 450 800 550 600 300"/></circle>
+			<circle class="infinity-particle particle-late" r="3.5"><animateMotion begin="-4s" dur="8s" repeatCount="indefinite" path="M600 300 C400 50 100 150 100 300 C100 450 400 550 600 300 C800 50 1100 150 1100 300 C1100 450 800 550 600 300"/></circle>
+		</svg>
+	</div>
 	<div class="site-shell">
 		<header class="topbar">
 			<a class="brand" href="#home" aria-label="Zain Ahmed home"><span class="brand-mark">Z<span>.</span></span><span class="brand-name">ZAIN AHMED</span></a>
@@ -46,7 +54,7 @@
 					<div class="social-row" id="connect" aria-label="Social links">
 						<a href="https://github.com/zain4hmed" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
 						<a href="https://www.linkedin.com/in/zain-ahmed-689285223" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-						<a class="leetcode-link" href="https://leetcode.com/u/zain4hmed/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span>LC</span></a>
+						<a class="leetcode-link" href="https://leetcode.com/u/zain4hmed/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode"><img src="https://cdn.simpleicons.org/leetcode/F89F1B" alt="" width="24" height="24"><span>LeetCode</span></a>
 						<span class="social-caption">FIND ME AROUND THE WEB</span>
 					</div>
 				</div>

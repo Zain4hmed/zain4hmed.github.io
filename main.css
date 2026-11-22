@@ -203,6 +203,8 @@ h1 { font-size: clamp(calc(52px * var(--text-scale)), calc(6.2vw * var(--text-sc
 .social-row a { width: 50px; height: 50px; font-size: 23px; }
 .leetcode-link { display: flex !important; align-items: center; justify-content: center; gap: 4px; }
 .leetcode-link span { font: 10px var(--mono); }
+.leetcode-link img { display: block; flex: 0 0 auto; filter: drop-shadow(0 0 7px rgba(248,159,27,.5)); transition: transform .24s ease, filter .24s ease; }
+.leetcode-link:hover img { transform: scale(1.18) rotate(-7deg); filter: drop-shadow(0 0 12px #f89f1b); }
 .social-caption { font-size: calc(11px * var(--text-scale)); }
 .section-intro { font-size: calc(14px * var(--text-scale)); }
 .project-type { font-size: calc(10px * var(--text-scale)); }
@@ -267,20 +269,19 @@ body::after { position: fixed; z-index: 5; inset: 0; content: ""; pointer-events
 	body::before, body::after, .pulse-dot, .orbit-one, .orbit-two, .code-card, .accent-text, .project-card { animation: none !important; }
 }
 
-/* Animated ambient light on the page's deepest visual layer. */
+/* Floating infinity-shaped neon beam on the page's deepest visual layer. */
 body { position: relative; isolation: isolate; }
 body::before { z-index: 0; }
 .ambient-lights { position: fixed; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
-.light-beam { position: absolute; left: -30vw; width: 68vw; height: 2px; border-radius: 50%; opacity: .68; filter: blur(5px); transform: rotate(-18deg); }
-.light-beam::after { position: absolute; inset: -18px 0; content: ""; background: inherit; filter: blur(24px); }
-.beam-cyan { top: 19%; background: linear-gradient(90deg, transparent, rgba(99,245,210,.98) 31%, rgba(99,245,210,.25) 70%, transparent); animation: beam-cross-screen 13s linear infinite, neon-hue 12s linear infinite; }
-.beam-violet { top: 66%; left: auto; right: -30vw; opacity: .55; background: linear-gradient(90deg, transparent, rgba(174,140,255,.98) 27%, rgba(174,140,255,.25) 70%, transparent); animation: beam-cross-screen-reverse 17s linear infinite, neon-hue 16s linear infinite reverse; }
-.beam-white { top: 43%; left: -25vw; width: 54vw; height: 1px; opacity: .42; filter: blur(2px); background: linear-gradient(90deg, transparent, rgba(214,245,255,.98) 48%, transparent); animation: beam-cross-screen 10s linear 2s infinite, neon-hue-white 9s linear infinite; }
+.infinity-beam { position: absolute; top: 29vh; left: 50%; width: min(112vw, 1480px); height: auto; overflow: visible; opacity: .58; transform: translateX(-50%); filter: saturate(1.35); animation: float-infinity 9s ease-in-out infinite alternate, infinity-hues 16s linear infinite; }
+.infinity-halo { fill: none; stroke: url(#infinity-neon); stroke-width: 28; stroke-linecap: round; opacity: .52; filter: blur(10px); }
+.infinity-core { fill: none; stroke: url(#infinity-neon); stroke-width: 2.4; stroke-linecap: round; opacity: .9; }
+.infinity-particle { fill: #fff; filter: drop-shadow(0 0 5px #fff) drop-shadow(0 0 12px #63f5d2); }
+.particle-late { opacity: .75; }
 .site-shell { position: relative; z-index: 1; isolation: isolate; }
 .site-shell::before { position: absolute; z-index: -1; inset: 0; content: ""; pointer-events: none; border-right: 1px solid rgba(170,186,217,.1); border-left: 1px solid rgba(170,186,217,.1); background: rgba(11,14,24,.2); box-shadow: 0 0 100px rgba(0,0,0,.11); backdrop-filter: blur(20px) saturate(135%); }
 :root[data-theme="light"] .site-shell::before { background: rgba(244,248,255,.42); border-color: rgba(53,73,101,.1); box-shadow: 0 0 100px rgba(60,82,115,.1); }
-:root[data-theme="light"] .beam-cyan { background: linear-gradient(90deg, transparent, rgba(4,162,142,.63) 31%, rgba(4,162,142,.12) 59%, transparent); }
-:root[data-theme="light"] .beam-violet { background: linear-gradient(90deg, transparent, rgba(128,90,215,.57) 27%, rgba(128,90,215,.1) 62%, transparent); }
+:root[data-theme="light"] .infinity-beam { opacity: .5; }
 
 /* Frosted project tiles and pointer feedback. */
 .project-card { position: relative; background: rgba(15,19,31,.72); backdrop-filter: blur(15px) saturate(130%); transform-style: preserve-3d; }
@@ -304,10 +305,8 @@ body::before { z-index: 0; }
 .icon-credit { color: #788196; font: 9px var(--mono); letter-spacing: .04em; }
 .icon-credit:hover { color: var(--cyan); }
 :root[data-theme="light"] .icon-credit { color: #526074; }
-@keyframes beam-cross-screen { from { transform: translate3d(-8vw, -3vh, 0) rotate(-20deg); } to { transform: translate3d(155vw, 11vh, 0) rotate(-10deg); } }
-@keyframes beam-cross-screen-reverse { from { transform: translate3d(8vw, 4vh, 0) rotate(-12deg); } to { transform: translate3d(-155vw, -11vh, 0) rotate(-23deg); } }
-@keyframes neon-hue { to { filter: blur(12px) hue-rotate(360deg) saturate(1.45); } }
-@keyframes neon-hue-white { to { filter: blur(3px) hue-rotate(360deg) saturate(1.5); } }
+@keyframes float-infinity { from { transform: translate(-50%,-1vh) rotate(-1.5deg) scale(.97); } to { transform: translate(-50%,2vh) rotate(1.5deg) scale(1.03); } }
+@keyframes infinity-hues { to { filter: hue-rotate(360deg) saturate(1.7); } }
 @keyframes glass-sweep { to { transform: translateX(50%); } }
 @media (max-width: 650px) {
 	.site-shell::before { backdrop-filter: blur(14px) saturate(125%); }
@@ -315,5 +314,5 @@ body::before { z-index: 0; }
 	.icon-credit { font-size: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-	.light-beam, .project-card::after { animation: none !important; }
+	.infinity-beam, .project-card::after { animation: none !important; }
 }
