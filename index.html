@@ -16,12 +16,16 @@
 	<div class="ambient-lights" aria-hidden="true">
 		<div class="cursor-aura"></div>
 		<svg class="light-trail" viewBox="0 0 1200 600" role="presentation">
-			<defs><linearGradient id="trail-neon" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--beam-red)"/><stop offset=".22" stop-color="var(--beam-orange)"/><stop offset=".46" stop-color="var(--beam-uv)"/><stop offset=".7" stop-color="var(--beam-violet)"/><stop offset=".86" stop-color="var(--beam-green)"/><stop offset="1" stop-color="var(--beam-cyan)"/></linearGradient></defs>
-			<g class="circuit-traces">
-				<path class="trail-base" d="M-40 105 H120 V178 H260 V103 H415 V170 H555 V92 H710 V162 H860 V82 H1015 V150 H1240 M-40 492 H110 V418 H248 V514 H390 V446 H535 V525 H692 V405 H840 V494 H995 V380 H1240 M128 -30 V62 H292 V245 H445 V316 H603 V259 H760 V346 H916 V236 H1064 V294 H1220"/>
-				<path class="trail-glow" d="M-40 105 H120 V178 H260 V103 H415 V170 H555 V92 H710 V162 H860 V82 H1015 V150 H1240 M-40 492 H110 V418 H248 V514 H390 V446 H535 V525 H692 V405 H840 V494 H995 V380 H1240 M128 -30 V62 H292 V245 H445 V316 H603 V259 H760 V346 H916 V236 H1064 V294 H1220"/>
-				<path class="trail-beam" d="M-40 105 H120 V178 H260 V103 H415 V170 H555 V92 H710 V162 H860 V82 H1015 V150 H1240 M-40 492 H110 V418 H248 V514 H390 V446 H535 V525 H692 V405 H840 V494 H995 V380 H1240 M128 -30 V62 H292 V245 H445 V316 H603 V259 H760 V346 H916 V236 H1064 V294 H1220"/>
-				<circle class="trail-node" cx="120" cy="105" r="4"/><circle class="trail-node" cx="415" cy="170" r="4"/><circle class="trail-node" cx="710" cy="92" r="4"/><circle class="trail-node" cx="1015" cy="150" r="4"/><circle class="trail-node" cx="248" cy="514" r="4"/><circle class="trail-node" cx="692" cy="405" r="4"/><circle class="trail-node" cx="916" cy="236" r="4"/>
+			<defs>
+				<linearGradient id="trail-neon" x1="0" y1="0" x2="1" y2="1"><stop stop-color="var(--beam-violet)"/><stop offset=".28" stop-color="var(--beam-red)"/><stop offset=".53" stop-color="var(--beam-orange)"/><stop offset=".76" stop-color="var(--beam-green)"/><stop offset="1" stop-color="var(--beam-uv)"/></linearGradient>
+				<linearGradient id="trail-echo" x1="1" y1="0" x2="0" y2="1"><stop stop-color="var(--beam-orange)"/><stop offset=".4" stop-color="var(--beam-uv)"/><stop offset=".72" stop-color="var(--beam-red)"/><stop offset="1" stop-color="var(--beam-green)"/></linearGradient>
+			</defs>
+			<g class="neon-weave">
+				<path class="trail-base" d="M-80 120 C40 10 135 255 245 132 S342 330 466 244 S552 42 660 97 S706 368 830 366 S890 154 1001 190 S1030 385 1290 278"/>
+				<path class="trail-glow" d="M-80 120 C40 10 135 255 245 132 S342 330 466 244 S552 42 660 97 S706 368 830 366 S890 154 1001 190 S1030 385 1290 278 M-60 475 C45 390 127 535 225 443 S300 565 425 479 S478 260 590 302 S639 535 766 518 S800 350 944 420 S1051 530 1290 442"/>
+				<path class="trail-beam" d="M-80 120 C40 10 135 255 245 132 S342 330 466 244 S552 42 660 97 S706 368 830 366 S890 154 1001 190 S1030 385 1290 278 M-60 475 C45 390 127 535 225 443 S300 565 425 479 S478 260 590 302 S639 535 766 518 S800 350 944 420 S1051 530 1290 442"/>
+				<path class="trail-echo" d="M270 280 C190 210 284 130 348 200 C423 284 323 360 260 294 C188 219 258 100 367 130 C496 165 488 329 363 371 C272 402 204 357 190 293 M945 265 C1027 196 1088 266 1022 324 C956 382 866 335 909 257 C972 145 1120 171 1135 295 C1152 414 1038 458 935 399"/>
+				<circle class="trail-node" cx="245" cy="132" r="4"/><circle class="trail-node" cx="466" cy="244" r="4"/><circle class="trail-node" cx="830" cy="366" r="4"/><circle class="trail-node" cx="225" cy="443" r="4"/><circle class="trail-node" cx="590" cy="302" r="4"/><circle class="trail-node" cx="944" cy="420" r="4"/>
 			</g>
 		</svg>
 	</div>
@@ -114,7 +118,7 @@
 					</figure>
 					<div class="code-card" tabindex="0" role="region" aria-label="Interactive engineering console. Hover or focus to reveal the portrait.">
 						<div class="code-card-top"><div class="window-dots"><i></i><i></i><i></i></div><span>ENGINEERING.LOG</span><span class="code-live"><b></b> LIVE</span></div>
-						<div class="code-content" aria-label="Automatically updating career log"><pre class="terminal-lines" id="terminal-lines" aria-hidden="true"></pre><span class="cursor" aria-hidden="true"></span></div>
+						<div class="code-content" aria-label="Automatically updating career log"><pre class="terminal-lines" id="terminal-lines" aria-hidden="true"></pre></div>
 					</div>
 				</div>
 			</section>
@@ -300,10 +304,15 @@
 				if (reducedMotion()) {
 					line.textContent = text;
 				} else {
+					const lineCursor = document.createElement('i');
+					lineCursor.className = 'line-cursor';
+					lineCursor.setAttribute('aria-hidden', 'true');
+					line.append(lineCursor);
 					for (const character of text) {
-						line.append(document.createTextNode(character));
+						line.insertBefore(document.createTextNode(character), lineCursor);
 						await pause(25);
 					}
+					lineCursor.remove();
 				}
 				terminal.scrollTop = terminal.scrollHeight;
 				if (!reducedMotion() && logIndex % 4 === 3) {
