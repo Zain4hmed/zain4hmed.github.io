@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Maze — Target Hunt</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #101114;
+    --panel: #191b20;
+    --border: #30343d;
+    --muted: #9ba1ad;
+    --accent: #d9cba6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 24px;
+    background: var(--bg);
+    color: #f3f3f3;
+    font: 14px/1.5 system-ui, -apple-system, Segoe UI, sans-serif;
+  }
+  .app { width: min(100%, 1050px); margin: 0 auto; display: grid; gap: 14px; }
+  .top, .controls-head, .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  h1 { margin: 0; font-size: clamp(20px, 3vw, 28px); }
+  .subtitle, .hint { color: var(--muted); }
+  .stage {
+    position: relative;
+    height: min(68vh, 650px);
+    min-height: 360px;
+    overflow: hidden;
+    background: #080808;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    touch-action: none;
+  }
+  canvas { width: 100%; height: 100%; display: block; cursor: none; touch-action: none; }
+  .hud {
+    position: absolute; top: 12px; left: 14px;
+    color: #a9a9a9; font: 12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+    pointer-events: none; text-shadow: 0 1px 3px #000;
+  }
+  .hud strong { color: white; }
+  button {
+    color: #f4f4f4; background: #20232a; border: 1px solid var(--border);
+    border-radius: 8px; padding: 9px 13px; cursor: pointer; font-size: 13px;
+  }
+  button:hover { background: #2b2f38; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .stat, .controls { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+  .stat small { display: block; color: var(--muted); font-size: 10px; letter-spacing: .06em; }
+  .stat b { font: 18px ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .controls { display: grid; gap: 15px; }
+  .setting { display: grid; gap: 6px; }
+  input[type="range"] { width: 100%; accent-color: var(--accent); }
+  .keys { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; color: var(--muted); font-size: 12px; }
+  kbd { display: inline-block; min-width: 29px; text-align: center; padding: 3px 7px; color: #eee; background: #20232a; border: 1px solid #454a55; border-bottom-width: 3px; border-radius: 5px; font: 12px ui-monospace, monospace; }
+  .footer { color: var(--muted); text-align: center; font-size: 12px; }
+
+  /* Twin virtual sticks for touchscreens. Hidden on ordinary desktop pointers. */
+  .touch-controls {
+    position: absolute;
+    inset: auto 0 12px 0;
+    display: none;
+    justify-content: space-between;
+    align-items: end;
+    padding: 0 16px;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .stick-wrap {
+    display: grid;
+    justify-items: center;
+    gap: 5px;
+    pointer-events: none;
+    user-select: none;
+  }
+  .stick-label {
+    color: rgba(255,255,255,.78);
+    font: 10px ui-monospace, monospace;
+    letter-spacing: .08em;
+    text-shadow: 0 1px 4px #000;
+  }
+  .stick {
+    width: 116px;
+    height: 116px;
+    border: 1px solid rgba(255,255,255,.32);
+    border-radius: 50%;
+    background: rgba(35,39,47,.48);
+    box-shadow: inset 0 0 24px rgba(0,0,0,.35), 0 2px 12px rgba(0,0,0,.25);
+    position: relative;
+    pointer-events: auto;
+    touch-action: none;
+  }
+  .stick::before, .stick::after {
+    content: "";
+    position: absolute;
+    background: rgba(255,255,255,.12);
+    pointer-events: none;
+  }
+  .stick::before { width: 1px; height: 72%; left: 50%; top: 14%; }
+  .stick::after { height: 1px; width: 72%; top: 50%; left: 14%; }
+  .stick-knob {
+    position: absolute;
+    width: 46px;
+    height: 46px;
+    left: 50%;
+    top: 50%;
+    margin: -23px 0 0 -23px;
+    border-radius: 50%;
+    background: rgba(220,225,235,.82);
+    border: 2px solid rgba(255,255,255,.85);
+    box-shadow: 0 2px 10px rgba(0,0,0,.45);
+    transform: translate(0,0);
+    pointer-events: none;
+  }
+  .stick.active .stick-knob { background: rgba(220,203,166,.95); }
+  @media (pointer: coarse), (max-width: 700px) {
+    .touch-controls { display: flex; }
+    .stage { user-select: none; }
+  }
+  @media (max-width: 600px) {
+    body { padding: 12px; }
+    .stage { min-height: 390px; height: 58vh; }
+    .stats { gap: 6px; }
+    .stat { padding: 9px; }
+    .stat b { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div>
+      <h1>Dark Maze: Target Hunt</h1>
+      <div class="subtitle">Explore wide, winding hallways, find every target, and survive the darkness</div>
+    </div>
+    <button id="newMaze">↻ New maze</button>
+  </header>
+
+  <section class="stage" id="stage">
+    <canvas id="mazeCanvas" tabindex="0" aria-label="Maze explorer. Move with WASD or arrow keys."></canvas>
+    <div class="hud">LIGHT SOURCE <strong>●</strong><br><span id="position">MOVE: WASD / ARROWS</span><br><span id="targetHud">TARGETS: 0 / 10</span></div>
+    <div class="touch-controls" aria-label="Touch controls">
+      <div class="stick-wrap">
+        <div class="stick-label">MOVE</div>
+        <div class="stick" id="moveStick" role="application" aria-label="Movement joystick">
+          <div class="stick-knob" id="moveKnob"></div>
+        </div>
+      </div>
+      <div class="stick-wrap">
+        <div class="stick-label">AIM / AUTO-FIRE</div>
+        <div class="stick" id="aimStick" role="application" aria-label="Aim joystick">
+          <div class="stick-knob" id="aimKnob"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="keys">
+    <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+    <span>or</span>
+    <kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd>
+    <span style="margin-left:8px">Hold <kbd>Shift</kbd> to sprint</span>
+    <span style="margin-left:8px">Desktop: move mouse to aim · Touch: right joystick aims</span>
+  </div>
+
+  <section class="stats">
+    <div class="stat"><small>LIGHT RAYS</small><b id="rayStat">200</b></div>
+    <div class="stat"><small>WALL INTERSECTIONS</small><b id="hits">200</b></div>
+    <div class="stat"><small>TARGETS LEFT</small><b id="targetsLeft">10</b></div>
+  </section>
+
+  <section class="controls">
+    <div class="setting">
+      <div class="controls-head"><label for="rays">Light rays</label><b id="rayLabel">200</b></div>
+      <input id="rays" type="range" min="40" max="600" step="20" value="200">
+    </div>
+    <div class="setting">
+      <div class="controls-head"><label for="intensity">Light intensity</label><b id="intensityLabel">100%</b></div>
+      <input id="intensity" type="range" min="20" max="150" step="5" value="100">
+    </div>
+    <div class="setting">
+      <div class="controls-head"><label for="falloff">Light falloff</label><b id="falloffLabel">Strong</b></div>
+      <input id="falloff" type="range" min="1" max="6" step="1" value="4">
+    </div>
+    <div class="setting">
+      <div class="controls-head"><label for="mazeVisibility">Maze visibility</label><b id="mazeVisibilityLabel">0%</b></div>
+      <input id="mazeVisibility" type="range" min="0" max="100" step="5" value="0">
+    </div>
+    <div class="row">
+      <button id="toggleGrid">Grid: OFF</button>
+      <button id="resetPosition">Reset position</button>
+    </div>
+  </section>
+
+  <p class="footer">Desktop: move with WASD / arrow keys and aim with the mouse. Phone / tablet: use the left joystick to move and the right joystick to aim. Your weapon fires continuously in the aimed direction. Targets roam through corridors; walls block bullets.</p>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  const canvas = document.getElementById("mazeCanvas");
+  const ctx = canvas.getContext("2d");
+  const stage = document.getElementById("stage");
+
+  const COLS = 51;
+  const ROWS = 35;
+  const TAU = Math.PI * 2;
+
+  let maze = [];
+  let rayCount = 200;
+  let intensity = 1;
+  let falloff = 4;
+  let mazeVisibility = 0;
+  let showGrid = false;
+  let playerX = 2.5;
+  let playerY = 2.5;
+  let cellSize = 10;
+  let offsetX = 0;
+  let offsetY = 0;
+  let dirty = true;
+  let lastFrame = 0;
+  let aimX = 1, aimY = 0;
+  let shootCooldown = 0;
+  let bullets = [], targets = [], score = 0;
+  const TARGET_TOTAL = 10;
+  const BULLET_SPEED = 15;
+  const FIRE_INTERVAL = 0.14;
+
+  const pressedKeys = new Set();
+  let touchMoveX = 0, touchMoveY = 0;
+  let touchAimActive = false;
+
+  const $ = (id) => document.getElementById(id);
+
+  // Generate a proper winding labyrinth with broad corridors.
+  // The DFS operates on widely spaced junctions; each connection is carved
+  // as a 3-cell-wide hallway, not as a tiled set of square rooms.
+  function generateMaze() {
+    maze = Array.from({ length: ROWS }, () => Array(COLS).fill(1));
+
+    const nodeCols = 12;
+    const nodeRows = 8;
+    const nodeStep = 4;
+    const nodeSize = 3;
+    const nodeOpen = Array.from({ length: nodeRows }, () => Array(nodeCols).fill(false));
+    const stack = [[0, 0]];
+    nodeOpen[0][0] = true;
+    const directions = [[0,-1],[1,0],[0,1],[-1,0]];
+
+    const carveJunction = (gx, gy) => {
+      const bx = 2 + gx * nodeStep;
+      const by = 2 + gy * nodeStep;
+      for (let yy = 0; yy < nodeSize; yy++) {
+        for (let xx = 0; xx < nodeSize; xx++) {
+          maze[by + yy][bx + xx] = 0;
+        }
+      }
+    };
+
+    const carveHallway = (gx, gy, dx, dy) => {
+      const bx = 2 + gx * nodeStep;
+      const by = 2 + gy * nodeStep;
+      // Leave the full three-cell width open across the one-cell gap
+      // between adjacent junctions.
+      if (dx === 1) {
+        for (let yy = 0; yy < nodeSize; yy++) maze[by + yy][bx + nodeSize] = 0;
+      } else if (dx === -1) {
+        for (let yy = 0; yy < nodeSize; yy++) maze[by + yy][bx - 1] = 0;
+      } else if (dy === 1) {
+        for (let xx = 0; xx < nodeSize; xx++) maze[by + nodeSize][bx + xx] = 0;
+      } else if (dy === -1) {
+        for (let xx = 0; xx < nodeSize; xx++) maze[by - 1][bx + xx] = 0;
+      }
+    };
+
+    carveJunction(0, 0);
+
+    // Randomized depth-first search creates a connected, winding route network.
+    while (stack.length) {
+      const [gx, gy] = stack[stack.length - 1];
+      const shuffled = directions.slice().sort(() => Math.random() - 0.5);
+      let carved = false;
+
+      for (const [dx, dy] of shuffled) {
+        const nx = gx + dx;
+        const ny = gy + dy;
+        if (nx < 0 || ny < 0 || nx >= nodeCols || ny >= nodeRows || nodeOpen[ny][nx]) continue;
+
+        carveHallway(gx, gy, dx, dy);
+        carveJunction(nx, ny);
+        nodeOpen[ny][nx] = true;
+        stack.push([nx, ny]);
+        carved = true;
+        break;
+      }
+      if (!carved) stack.pop();
+    }
+
+    // Add a handful of alternate connections, keeping the overall corridor
+    // structure intact while preventing every route from being a dead end.
+    for (let i = 0; i < 12; i++) {
+      const gx = Math.floor(Math.random() * nodeCols);
+      const gy = Math.floor(Math.random() * nodeRows);
+      const [dx, dy] = directions[Math.floor(Math.random() * directions.length)];
+      const nx = gx + dx;
+      const ny = gy + dy;
+      if (nx < 0 || ny < 0 || nx >= nodeCols || ny >= nodeRows || !nodeOpen[ny][nx]) continue;
+      carveHallway(gx, gy, dx, dy);
+    }
+
+    // Spawn in the center of the entrance junction.
+    playerX = 3.5;
+    playerY = 3.5;
+    aimX = 1;
+    aimY = 0;
+    pressedKeys.clear();
+    bullets = [];
+    score = 0;
+    shootCooldown = 0;
+    placeTargets();
+    dirty = true;
+    updatePositionLabel();
+    updateTargetHud();
+  }
+
+  function resizeCanvas() {
+    const rect = stage.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    cellSize = Math.min(rect.width / COLS, rect.height / ROWS);
+    offsetX = (rect.width - COLS * cellSize) / 2;
+    offsetY = (rect.height - ROWS * cellSize) / 2;
+    dirty = true;
+  }
+
+  function updatePositionLabel() {
+    $("position").textContent =
+      `X ${playerX.toFixed(1)} · Y ${playerY.toFixed(1)}`;
+  }
+
+  function updateAim(event) {
+    const rect = canvas.getBoundingClientRect();
+    const sx = event.clientX - rect.left;
+    const sy = event.clientY - rect.top;
+    const dx = sx - (offsetX + playerX * cellSize);
+    const dy = sy - (offsetY + playerY * cellSize);
+    const length = Math.hypot(dx, dy) || 1;
+    aimX = dx / length;
+    aimY = dy / length;
+    dirty = true;
+  }
+
+  canvas.addEventListener("pointermove", event => {
+    if (event.pointerType === "mouse" && !touchAimActive) updateAim(event);
+  });
+  canvas.addEventListener("pointerdown", event => {
+    canvas.focus();
+    if (event.pointerType === "mouse" && !touchAimActive) updateAim(event);
+  });
+
+  const keyDirections = {
+    w: [0,-1], arrowup: [0,-1],
+    s: [0,1], arrowdown: [0,1],
+    a: [-1,0], arrowleft: [-1,0],
+    d: [1,0], arrowright: [1,0]
+  };
+
+  function bindVirtualStick(stickId, knobId, onVector) {
+    const stick = $(stickId);
+    const knob = $(knobId);
+    let pointerId = null;
+    const maxRadius = 34;
+
+    function setFromPointer(event) {
+      const rect = stick.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      let dx = event.clientX - centerX;
+      let dy = event.clientY - centerY;
+      const length = Math.hypot(dx, dy);
+      if (length > maxRadius) {
+        dx = dx / length * maxRadius;
+        dy = dy / length * maxRadius;
+      }
+      knob.style.transform = `translate(${dx}px, ${dy}px)`;
+
+      let vx = dx / maxRadius;
+      let vy = dy / maxRadius;
+      const magnitude = Math.hypot(vx, vy);
+      if (magnitude < 0.16) {
+        vx = 0;
+        vy = 0;
+      } else {
+        const scaled = Math.min(1, (magnitude - 0.16) / 0.84);
+        vx = vx / magnitude * scaled;
+        vy = vy / magnitude * scaled;
+      }
+      onVector(vx, vy, magnitude >= 0.16);
+      dirty = true;
+    }
+
+    function release(event) {
+      if (pointerId !== event.pointerId) return;
+      pointerId = null;
+      stick.classList.remove("active");
+      knob.style.transform = "translate(0px, 0px)";
+      onVector(0, 0, false);
+      dirty = true;
+    }
+
+    stick.addEventListener("pointerdown", event => {
+      event.preventDefault();
+      if (pointerId !== null) return;
+      pointerId = event.pointerId;
+      stick.classList.add("active");
+      stick.setPointerCapture(pointerId);
+      setFromPointer(event);
+    });
+    stick.addEventListener("pointermove", event => {
+      if (pointerId === event.pointerId) {
+        event.preventDefault();
+        setFromPointer(event);
+      }
+    });
+    stick.addEventListener("pointerup", release);
+    stick.addEventListener("pointercancel", release);
+    stick.addEventListener("lostpointercapture", event => {
+      if (pointerId === event.pointerId) release(event);
+    });
+  }
+
+  bindVirtualStick("moveStick", "moveKnob", (x, y) => {
+    touchMoveX = x;
+    touchMoveY = y;
+  });
+
+  bindVirtualStick("aimStick", "aimKnob", (x, y, active) => {
+    if (active) {
+      const length = Math.hypot(x, y) || 1;
+      aimX = x / length;
+      aimY = y / length;
+      touchAimActive = true;
+    } else {
+      touchAimActive = false;
+    }
+  });
+
+  window.addEventListener("keydown", event => {
+    const key = event.key.toLowerCase();
+    if (keyDirections[key] || key === "shift") {
+      if (keyDirections[key]) event.preventDefault();
+      pressedKeys.add(key);
+    }
+  });
+
+  window.addEventListener("keyup", event => {
+    pressedKeys.delete(event.key.toLowerCase());
+  });
+
+  window.addEventListener("blur", () => pressedKeys.clear());
+
+  function placeTargets() {
+    const candidates = [];
+    for (let y = 1; y < ROWS - 1; y++) {
+      for (let x = 1; x < COLS - 1; x++) {
+        if (maze[y][x] !== 0) continue;
+        const px = x + 0.5, py = y + 0.5;
+        if (Math.hypot(px - playerX, py - playerY) > 7) candidates.push({ x: px, y: py });
+      }
+    }
+    for (let i = candidates.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+    }
+    targets = [];
+    for (const c of candidates) {
+      if (targets.every(t => Math.hypot(t.x - c.x, t.y - c.y) > 4.5)) {
+        targets.push({
+          ...c, radius: 0.22, alive: true,
+          vx: 0, vy: 0, moveTimer: Math.random() * 0.8
+        });
+        if (targets.length === TARGET_TOTAL) break;
+      }
+    }
+  }
+
+  function updateTargetHud() {
+    const remaining = targets.filter(t => t.alive).length;
+    $("targetsLeft").textContent = remaining;
+    $("targetHud").textContent = remaining === 0
+      ? "ALL TARGETS ELIMINATED — YOU WIN!"
+      : `TARGETS: ${score} / ${TARGET_TOTAL}`;
+  }
+
+  function updateTargets(dt) {
+    for (const target of targets) {
+      if (!target.alive) continue;
+
+      target.moveTimer -= dt;
+      if (target.moveTimer <= 0) {
+        // Pick a new direction periodically. Targets roam through open
+        // corridors and naturally turn around when they meet a wall.
+        const choices = [
+          [1, 0], [-1, 0], [0, 1], [0, -1],
+          [0.707, 0.707], [-0.707, 0.707],
+          [0.707, -0.707], [-0.707, -0.707],
+          [0, 0]
+        ].sort(() => Math.random() - 0.5);
+
+        let chosen = [0, 0];
+        for (const [dx, dy] of choices) {
+          const nx = target.x + dx * 0.55;
+          const ny = target.y + dy * 0.55;
+          if (dx === 0 && dy === 0) {
+            chosen = [dx, dy];
+            break;
+          }
+          if (isOpen(nx, ny) && isOpen(nx + Math.sign(dx) * 0.17, ny) &&
+              isOpen(nx, ny + Math.sign(dy) * 0.17)) {
+            chosen = [dx, dy];
+            break;
+          }
+        }
+
+        const speed = 0.75 + Math.random() * 0.55;
+        target.vx = chosen[0] * speed;
+        target.vy = chosen[1] * speed;
+        target.moveTimer = 0.45 + Math.random() * 1.15;
+      }
+
+      const stepX = target.x + target.vx * dt;
+      const stepY = target.y + target.vy * dt;
+
+      if (isOpen(stepX, target.y) && isOpen(stepX + Math.sign(target.vx) * 0.16, target.y)) {
+        target.x = stepX;
+      } else {
+        target.vx *= -1;
+        target.moveTimer = 0;
+      }
+
+      if (isOpen(target.x, stepY) && isOpen(target.x, stepY + Math.sign(target.vy) * 0.16)) {
+        target.y = stepY;
+      } else {
+        target.vy *= -1;
+        target.moveTimer = 0;
+      }
+    }
+  }
+
+  function shootBullet() {
+    bullets.push({
+      x: playerX + aimX * 0.28, y: playerY + aimY * 0.28,
+      vx: aimX * BULLET_SPEED, vy: aimY * BULLET_SPEED, life: 2.2
+    });
+  }
+
+  function updateCombat(dt) {
+    shootCooldown -= dt;
+    // Automatic continuous fire: pointer movement changes aim only.
+    if (shootCooldown <= 0) {
+      shootBullet();
+      shootCooldown = FIRE_INTERVAL;
+    }
+    for (const bullet of bullets) {
+      bullet.life -= dt;
+      const travel = Math.hypot(bullet.vx * dt, bullet.vy * dt);
+      const steps = Math.max(1, Math.ceil(travel / 0.04));
+      let alive = true;
+      for (let i = 0; i < steps; i++) {
+        bullet.x += bullet.vx * dt / steps;
+        bullet.y += bullet.vy * dt / steps;
+        if (!isOpen(bullet.x, bullet.y)) { alive = false; break; }
+        const hit = targets.find(t => t.alive &&
+          Math.hypot(t.x - bullet.x, t.y - bullet.y) < t.radius + 0.08);
+        if (hit) {
+          hit.alive = false;
+          score++;
+          alive = false;
+          updateTargetHud();
+          break;
+        }
+      }
+      bullet.alive = alive && bullet.life > 0;
+    }
+    bullets = bullets.filter(b => b.alive);
+  }
+
+  function isOpen(x, y) {
+    return x >= 0 && y >= 0 && x < COLS && y < ROWS &&
+      maze[Math.floor(y)][Math.floor(x)] === 0;
+  }
+
+  function updateKeyboardMovement(deltaTime) {
+    let dx = 0;
+    let dy = 0;
+
+    for (const key of pressedKeys) {
+      if (keyDirections[key]) {
+        dx += keyDirections[key][0];
+        dy += keyDirections[key][1];
+      }
+    }
+
+    dx += touchMoveX;
+    dy += touchMoveY;
+    if (dx === 0 && dy === 0) return;
+
+    const length = Math.hypot(dx, dy);
+    const speed = pressedKeys.has("shift") ? 8 : 4.2;
+    const distance = speed * deltaTime;
+    dx = dx / length * distance;
+    dy = dy / length * distance;
+
+    // Substeps and a small collision radius prevent wall clipping.
+    const steps = Math.max(1, Math.ceil(distance / 0.025));
+
+    for (let i = 0; i < steps; i++) {
+      const nextX = playerX + dx / steps;
+      const nextY = playerY + dy / steps;
+
+      if (isOpen(nextX - 0.12, playerY - 0.12) &&
+          isOpen(nextX + 0.12, playerY - 0.12) &&
+          isOpen(nextX - 0.12, playerY + 0.12) &&
+          isOpen(nextX + 0.12, playerY + 0.12)) {
+        playerX = nextX;
+      }
+
+      if (isOpen(playerX - 0.12, nextY - 0.12) &&
+          isOpen(playerX + 0.12, nextY - 0.12) &&
+          isOpen(playerX - 0.12, nextY + 0.12) &&
+          isOpen(playerX + 0.12, nextY + 0.12)) {
+        playerY = nextY;
+      }
+    }
+
+    dirty = true;
+    updatePositionLabel();
+  }
+
+  // Grid-based DDA ray cast. Every ray stops at its first wall.
+  function castRay(angle) {
+    const dx = Math.cos(angle);
+    const dy = Math.sin(angle);
+
+    let mapX = Math.floor(playerX);
+    let mapY = Math.floor(playerY);
+
+    const deltaX = Math.abs(1 / dx);
+    const deltaY = Math.abs(1 / dy);
+    const stepX = dx < 0 ? -1 : 1;
+    const stepY = dy < 0 ? -1 : 1;
+
+    let sideX = (dx < 0 ? playerX - mapX : mapX + 1 - playerX) * deltaX;
+    let sideY = (dy < 0 ? playerY - mapY : mapY + 1 - playerY) * deltaY;
+
+    let distance = 0;
+
+    for (let i = 0; i < 300; i++) {
+      if (sideX < sideY) {
+        distance = sideX;
+        sideX += deltaX;
+        mapX += stepX;
+      } else {
+        distance = sideY;
+        sideY += deltaY;
+        mapY += stepY;
+      }
+
+      if (mapX < 0 || mapY < 0 || mapX >= COLS || mapY >= ROWS ||
+          maze[mapY][mapX] === 1) break;
+    }
+
+    return {
+      x: playerX + dx * distance,
+      y: playerY + dy * distance
+    };
+  }
+
+  function draw() {
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, width, height);
+
+    // At 0%, the maze is pitch black outside the illuminated floor.
+    // Raise Maze visibility to reveal the walls in charcoal gray.
+    const wallShade = Math.round(mazeVisibility * 0.48);
+    ctx.fillStyle = `rgb(${wallShade},${wallShade},${wallShade})`;
+    for (let y = 0; y < ROWS; y++) {
+      for (let x = 0; x < COLS; x++) {
+        if (maze[y][x] === 1) {
+          ctx.fillRect(
+            offsetX + x * cellSize,
+            offsetY + y * cellSize,
+            cellSize + 0.2,
+            cellSize + 0.2
+          );
+        }
+      }
+    }
+
+    // Include both 0° and 360°: the final ray overlaps the first.
+    // This closes the polygon without an angular seam.
+    const points = [];
+    for (let i = 0; i <= rayCount; i++) {
+      points.push(castRay(TAU * i / rayCount));
+    }
+
+    // Clip the light to the raycast visibility polygon.
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(offsetX + playerX * cellSize, offsetY + playerY * cellSize);
+    for (const point of points) {
+      ctx.lineTo(
+        offsetX + point.x * cellSize,
+        offsetY + point.y * cellSize
+      );
+    }
+    ctx.closePath();
+    ctx.clip();
+
+    // Radial falloff: the floor is brightest near the source and dims with distance.
+    const maxRadius = Math.hypot(width, height) * 0.7;
+    const gradient = ctx.createRadialGradient(
+      offsetX + playerX * cellSize,
+      offsetY + playerY * cellSize,
+      0,
+      offsetX + playerX * cellSize,
+      offsetY + playerY * cellSize,
+      maxRadius
+    );
+
+    // Stronger curves fade the light much faster with distance.
+    const powers = [0, 1.1, 2.0, 3.4, 5.2, 7.5, 10.5];
+    const power = powers[falloff];
+
+    for (let i = 0; i <= 20; i++) {
+      const t = i / 20;
+      const alpha = Math.min(
+        0.98,
+        Math.pow(Math.max(0, 1 - t), power) * intensity * 0.94
+      );
+      gradient.addColorStop(t, `rgba(255,245,220,${alpha})`);
+    }
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(offsetX, offsetY, COLS * cellSize, ROWS * cellSize);
+    ctx.restore();
+
+    // Walls are painted over the light. Their visibility is independently adjustable.
+    ctx.fillStyle = `rgb(${wallShade},${wallShade},${wallShade})`;
+    for (let y = 0; y < ROWS; y++) {
+      for (let x = 0; x < COLS; x++) {
+        if (maze[y][x] === 1) {
+          ctx.fillRect(
+            offsetX + x * cellSize,
+            offsetY + y * cellSize,
+            cellSize + 0.2,
+            cellSize + 0.2
+          );
+        }
+      }
+    }
+
+    // Targets remain visible in the darkness so the player can hunt them.
+    for (const target of targets) {
+      if (!target.alive) continue;
+      const tx = offsetX + target.x * cellSize;
+      const ty = offsetY + target.y * cellSize;
+      ctx.save();
+      ctx.shadowColor = "#ff4d55";
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = "#ff5964";
+      ctx.beginPath();
+      ctx.arc(tx, ty, Math.max(3.5, cellSize * 0.19), 0, TAU);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = "#ffe0df";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(tx, ty, Math.max(5, cellSize * 0.28), 0, TAU);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    for (const bullet of bullets) {
+      ctx.save();
+      ctx.shadowColor = "#ffe7a6";
+      ctx.shadowBlur = 9;
+      ctx.fillStyle = "#fff2bd";
+      ctx.beginPath();
+      ctx.arc(offsetX + bullet.x * cellSize, offsetY + bullet.y * cellSize,
+              Math.max(2, cellSize * 0.09), 0, TAU);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    const px = offsetX + playerX * cellSize;
+    const py = offsetY + playerY * cellSize;
+    ctx.strokeStyle = "rgba(255,255,255,0.75)";
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.lineTo(px + aimX * cellSize * 0.85, py + aimY * cellSize * 0.85);
+    ctx.stroke();
+
+    if (showGrid) {
+      ctx.strokeStyle = "rgba(120,120,120,0.13)";
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      for (let x = 0; x <= COLS; x++) {
+        ctx.moveTo(offsetX + x * cellSize, offsetY);
+        ctx.lineTo(offsetX + x * cellSize, offsetY + ROWS * cellSize);
+      }
+      for (let y = 0; y <= ROWS; y++) {
+        ctx.moveTo(offsetX, offsetY + y * cellSize);
+        ctx.lineTo(offsetX + COLS * cellSize, offsetY + y * cellSize);
+      }
+      ctx.stroke();
+    }
+
+    // Small white marker for the light source.
+    ctx.beginPath();
+    ctx.arc(
+      offsetX + playerX * cellSize,
+      offsetY + playerY * cellSize,
+      2.5, 0, TAU
+    );
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+
+    $("hits").textContent = rayCount;
+  }
+
+  function animate(timestamp) {
+    const deltaTime = lastFrame
+      ? Math.min((timestamp - lastFrame) / 1000, 0.05)
+      : 0;
+    lastFrame = timestamp;
+
+    updateKeyboardMovement(deltaTime);
+    updateTargets(deltaTime);
+    updateCombat(deltaTime);
+    dirty = true;
+
+    if (dirty || bullets.length) {
+      draw();
+      dirty = false;
+    }
+    requestAnimationFrame(animate);
+  }
+
+  $("newMaze").addEventListener("click", generateMaze);
+
+  $("resetPosition").addEventListener("click", () => {
+    playerX = 3.5;
+    playerY = 3.5;
+    bullets = [];
+    dirty = true;
+    updatePositionLabel();
+  });
+
+  $("rays").addEventListener("input", event => {
+    rayCount = Number(event.target.value);
+    $("rayLabel").textContent = rayCount;
+    $("rayStat").textContent = rayCount;
+    dirty = true;
+  });
+
+  $("intensity").addEventListener("input", event => {
+    intensity = Number(event.target.value) / 100;
+    $("intensityLabel").textContent = `${event.target.value}%`;
+    dirty = true;
+  });
+
+  $("falloff").addEventListener("input", event => {
+    falloff = Number(event.target.value);
+    $("falloffLabel").textContent =
+      ["", "Very gentle", "Gentle", "Medium", "Strong", "Very strong", "Extreme"][falloff];
+    dirty = true;
+  });
+
+  $("mazeVisibility").addEventListener("input", event => {
+    mazeVisibility = Number(event.target.value);
+    $("mazeVisibilityLabel").textContent = `${mazeVisibility}%`;
+    dirty = true;
+  });
+
+  $("toggleGrid").addEventListener("click", event => {
+    showGrid = !showGrid;
+    event.target.textContent = `Grid: ${showGrid ? "ON" : "OFF"}`;
+    dirty = true;
+  });
+
+  generateMaze();
+  resizeCanvas();
+  new ResizeObserver(resizeCanvas).observe(stage);
+  window.addEventListener("resize", resizeCanvas);
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>
