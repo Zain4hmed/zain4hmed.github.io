@@ -16,10 +16,13 @@
 	<div class="ambient-lights" aria-hidden="true">
 		<div class="cursor-aura"></div>
 		<svg class="light-trail" viewBox="0 0 1200 600" role="presentation">
-			<defs><linearGradient id="trail-neon" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--beam-red)"/><stop offset=".26" stop-color="var(--beam-orange)"/><stop offset=".52" stop-color="var(--beam-uv)"/><stop offset=".76" stop-color="var(--beam-violet)"/><stop offset="1" stop-color="var(--beam-cyan)"/></linearGradient></defs>
-			<path class="trail-base" pathLength="1000" d="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/>
-			<path class="trail-glow" pathLength="1000" d="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/>
-			<path class="trail-beam" pathLength="1000" d="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/>
+			<defs><linearGradient id="trail-neon" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--beam-red)"/><stop offset=".22" stop-color="var(--beam-orange)"/><stop offset=".46" stop-color="var(--beam-uv)"/><stop offset=".7" stop-color="var(--beam-violet)"/><stop offset=".86" stop-color="var(--beam-green)"/><stop offset="1" stop-color="var(--beam-cyan)"/></linearGradient></defs>
+			<g class="circuit-traces">
+				<path class="trail-base" d="M-40 105 H120 V178 H260 V103 H415 V170 H555 V92 H710 V162 H860 V82 H1015 V150 H1240 M-40 492 H110 V418 H248 V514 H390 V446 H535 V525 H692 V405 H840 V494 H995 V380 H1240 M128 -30 V62 H292 V245 H445 V316 H603 V259 H760 V346 H916 V236 H1064 V294 H1220"/>
+				<path class="trail-glow" d="M-40 105 H120 V178 H260 V103 H415 V170 H555 V92 H710 V162 H860 V82 H1015 V150 H1240 M-40 492 H110 V418 H248 V514 H390 V446 H535 V525 H692 V405 H840 V494 H995 V380 H1240 M128 -30 V62 H292 V245 H445 V316 H603 V259 H760 V346 H916 V236 H1064 V294 H1220"/>
+				<path class="trail-beam" d="M-40 105 H120 V178 H260 V103 H415 V170 H555 V92 H710 V162 H860 V82 H1015 V150 H1240 M-40 492 H110 V418 H248 V514 H390 V446 H535 V525 H692 V405 H840 V494 H995 V380 H1240 M128 -30 V62 H292 V245 H445 V316 H603 V259 H760 V346 H916 V236 H1064 V294 H1220"/>
+				<circle class="trail-node" cx="120" cy="105" r="4"/><circle class="trail-node" cx="415" cy="170" r="4"/><circle class="trail-node" cx="710" cy="92" r="4"/><circle class="trail-node" cx="1015" cy="150" r="4"/><circle class="trail-node" cx="248" cy="514" r="4"/><circle class="trail-node" cx="692" cy="405" r="4"/><circle class="trail-node" cx="916" cy="236" r="4"/>
+			</g>
 		</svg>
 	</div>
 	<div class="site-shell">

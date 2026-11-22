@@ -1001,3 +1001,29 @@ body::after { opacity:.055; background:repeating-linear-gradient(0deg,transparen
 :root[data-theme="light"] .hero-visual.ascii-mode .portrait-ascii { color:#201b17!important; text-shadow:0 0 1px rgba(28,21,15,.2); }
 @keyframes ascii-text-jitter { 0%,100% { transform:translateX(-50%); clip-path:inset(0 0 0 0); } 50% { transform:translateX(calc(-50% + 2px)); clip-path:inset(3% 0 1% 0); } }
 @media(max-width:480px) { .hero-visual.ascii-mode .portrait-ascii { font-size:6.5px; } }
+
+/* Distinct neon accents: ultraviolet, flame orange, signal red, and restrained acid green. */
+:root { --cyan:#a58bff; --purple:#ff824b; --beam-red:#ff4d59; --beam-orange:#ff963d; --beam-uv:#c68bff; --beam-violet:#755cff; --beam-green:#b8e36a; --beam-cyan:#e7b1ff; }
+:root[data-theme="light"] { --cyan:#6549b7; --purple:#b84b25; --beam-red:#bd303c; --beam-orange:#bc5a16; --beam-uv:#7448b9; --beam-violet:#5d45aa; --beam-green:#53791e; --beam-cyan:#7549a4; }
+.hero { --cyan:#a58bff; --purple:#ff6958; }
+.work-section { --cyan:#ff963d; --purple:#a58bff; }
+.experience-section { --cyan:#b8e36a; --purple:#ff8254; }
+.credentials-section { --cyan:#a58bff; --purple:#ffad54; }
+.about-section { --cyan:#ff6958; --purple:#9c83fa; }
+.curiosities-section { --cyan:#ff963d; --purple:#b8e36a; }
+:root[data-theme="light"] .hero { --cyan:#6549b7; --purple:#b83e2e; }
+:root[data-theme="light"] .work-section { --cyan:#a6531c; --purple:#6549b7; }
+:root[data-theme="light"] .experience-section { --cyan:#54791e; --purple:#a84b2e; }
+:root[data-theme="light"] .credentials-section { --cyan:#6549b7; --purple:#a6531c; }
+:root[data-theme="light"] .about-section { --cyan:#b83e2e; --purple:#6549b7; }
+:root[data-theme="light"] .curiosities-section { --cyan:#a6531c; --purple:#54791e; }
+
+/* Replace the old sweeping beam with a quiet, fixed circuit trace field. */
+.light-trail { top:12vh; opacity:.25; filter:none; animation:none!important; }
+:root[data-theme="light"] .light-trail { opacity:.22; }
+.trail-base,.trail-glow,.trail-beam { stroke-dasharray:none!important; stroke-dashoffset:0!important; filter:none!important; animation:none!important; }
+.trail-base { stroke-width:22; opacity:.09; }
+.trail-glow { stroke-width:9; opacity:.22; }
+.trail-beam { stroke-width:2.2; opacity:.72; }
+.trail-node { fill:var(--beam-green); stroke:var(--bg); stroke-width:2; opacity:.78; }
+:root[data-theme="light"] .trail-node { fill:var(--beam-orange); }
