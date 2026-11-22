@@ -1066,3 +1066,15 @@ body::after { opacity:.055; background:repeating-linear-gradient(0deg,transparen
 :root[data-theme="light"] .code-card-top { border-bottom-color:rgba(63,49,39,.14); }
 .line-cursor { display:inline-block; width:.56em; height:1.05em; margin-left:2px; vertical-align:-.16em; background:currentColor; opacity:.92; animation:line-caret-blink .72s steps(2,end) infinite; box-shadow:0 0 7px currentColor; }
 @keyframes line-caret-blink { 50% { opacity:.15; } }
+
+/* Give the opening hero a red/orange identity with no purple accents. */
+.hero { --cyan:#ff574f; --purple:#ffad57; }
+:root[data-theme="light"] .hero { --cyan:#bd3037; --purple:#a9501f; }
+.hero .hero-visual::before { background:rgba(201,65,46,.13); }
+.hero .visual-orbit { border-color:color-mix(in srgb,var(--purple) 35%,transparent); }
+.hero .orbit-one { border-color:color-mix(in srgb,var(--cyan) 32%,transparent); box-shadow:0 0 36px color-mix(in srgb,var(--cyan) 11%,transparent); }
+.hero .orbit-two { border-color:color-mix(in srgb,var(--purple) 35%,transparent); }
+.hero .code-purple { color:var(--purple); }
+.hero .code-card { border-color:color-mix(in srgb,var(--cyan) 34%,var(--line)); }
+.hero .code-card-top { border-bottom-color:color-mix(in srgb,var(--cyan) 20%,transparent); }
+:root[data-theme="light"] .hero .code-purple { color:#a9501f; }
