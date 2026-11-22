@@ -14,12 +14,12 @@
 </head>
 <body>
 	<div class="ambient-lights" aria-hidden="true">
-		<svg class="infinity-beam" viewBox="0 0 1200 600" role="presentation">
-			<defs><linearGradient id="infinity-neon" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#63f5d2"/><stop offset=".48" stop-color="#ae8cff"/><stop offset="1" stop-color="#ff54b8"/></linearGradient></defs>
-			<path class="infinity-halo" d="M600 300 C400 50 100 150 100 300 C100 450 400 550 600 300 C800 50 1100 150 1100 300 C1100 450 800 550 600 300"/>
-			<path class="infinity-core" d="M600 300 C400 50 100 150 100 300 C100 450 400 550 600 300 C800 50 1100 150 1100 300 C1100 450 800 550 600 300"/>
-			<circle class="infinity-particle" r="6"><animateMotion dur="8s" repeatCount="indefinite" path="M600 300 C400 50 100 150 100 300 C100 450 400 550 600 300 C800 50 1100 150 1100 300 C1100 450 800 550 600 300"/></circle>
-			<circle class="infinity-particle particle-late" r="3.5"><animateMotion begin="-4s" dur="8s" repeatCount="indefinite" path="M600 300 C400 50 100 150 100 300 C100 450 400 550 600 300 C800 50 1100 150 1100 300 C1100 450 800 550 600 300"/></circle>
+		<svg class="light-trail" viewBox="0 0 1200 600" role="presentation">
+			<defs><linearGradient id="trail-neon" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="var(--beam-red)"/><stop offset=".26" stop-color="var(--beam-orange)"/><stop offset=".52" stop-color="var(--beam-pink)"/><stop offset=".76" stop-color="var(--beam-violet)"/><stop offset="1" stop-color="var(--beam-cyan)"/></linearGradient></defs>
+			<path class="trail-base" pathLength="1000" d="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/>
+			<path class="trail-glow" pathLength="1000" d="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/>
+			<path class="trail-beam" pathLength="1000" d="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/>
+			<circle class="trail-particle" r="5"><animateMotion dur="21s" repeatCount="indefinite" path="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/></circle>
 		</svg>
 	</div>
 	<div class="site-shell">
@@ -39,6 +39,7 @@
 					<button type="button" data-text-size="large" aria-label="Larger text">A+</button>
 				</div>
 				<button class="theme-toggle" type="button" aria-label="Switch to light mode" title="Switch color theme"><i class="fa-solid fa-sun" aria-hidden="true"></i><span>LIGHT</span></button>
+				<button class="motion-toggle" type="button" aria-label="Pause visual effects" aria-pressed="true" title="Toggle visual effects"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span>FX ON</span></button>
 			</div>
 		</header>
 
@@ -46,7 +47,7 @@
 			<section class="hero section-wrap" id="home">
 				<div class="hero-copy">
 					<p class="eyebrow"><span class="eyebrow-line"></span> ENGINEER / ARCHITECT / DESIGNER <span class="eyebrow-index">/ 01</span></p>
-					<h1>Make ideas<br><span class="accent-text">click.</span></h1>
+					<h1>Java engineer.<br><span class="accent-text">Built to scale.</span></h1>
 					<p class="hero-summary">Java full-stack developer with 4+ years of experience building backend services, APIs, and modern web applications with Spring Boot, React, and distributed systems.</p>
 					<div class="hero-actions">
 						<a class="button button-primary cybr-btn" href="#experience"><span>Explore experience</span><span class="cybr-btn__glitch" aria-hidden="true">Explore experience</span><span class="cybr-btn__tag" aria-hidden="true">01//GO</span><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
@@ -64,10 +65,9 @@
 					<div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
 					<div class="visual-crosshair crosshair-one"></div><div class="visual-crosshair crosshair-two"></div>
 					<div class="code-card">
-						<div class="code-card-top"><div class="window-dots"><i></i><i></i><i></i></div><span>zain@workspace ~</span><span class="code-live"><b></b> LIVE</span></div>
-						<div class="editor-tabs" role="tablist" aria-label="Code editor demos"><button type="button" role="tab" aria-selected="true" aria-controls="code-preview" data-code-tab="0">profile.ts</button><button type="button" role="tab" aria-selected="false" aria-controls="code-preview" data-code-tab="1" tabindex="-1">build.log</button><button type="button" role="tab" aria-selected="false" aria-controls="code-preview" data-code-tab="2" tabindex="-1">impact.java</button></div>
-						<div class="code-content" id="code-preview" role="tabpanel" aria-label="Animated code preview"><pre class="terminal-lines" id="terminal-lines" aria-hidden="true"></pre><span class="cursor" aria-hidden="true"></span></div>
-						<div class="code-card-bottom"><span><i class="fa-solid fa-code"></i> AUTO-TYPING: <b>ON</b></span><span>CLICK TABS TO EXPLORE</span></div>
+						<div class="code-card-top"><div class="window-dots"><i></i><i></i><i></i></div><span>CAREER.LOG // SELECTED SIGNALS</span><span class="code-live"><b></b> STREAM</span></div>
+						<div class="code-content" aria-label="Automatically updating career log"><pre class="terminal-lines" id="terminal-lines" aria-hidden="true"></pre><span class="cursor" aria-hidden="true"></span></div>
+						<div class="code-card-bottom"><span><i class="fa-solid fa-terminal"></i> FACTS FROM THE FIELD</span><span>STREAMING / 01—09</span></div>
 					</div>
 					<div class="visual-tag tag-top"><span class="tag-pip"></span> SYSTEM ONLINE</div>
 					<div class="visual-tag tag-bottom">CREATIVE MODE <span>↗</span></div>
@@ -126,7 +126,9 @@
 			const root = document.documentElement;
 			const sizeButtons = [...document.querySelectorAll('[data-text-size]')];
 			const themeButton = document.querySelector('.theme-toggle');
-			const sizes = { small: '0.92', default: '1.12', large: '1.28' };
+			const motionToggle = document.querySelector('.motion-toggle');
+			const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+			const sizes = { small: '0.92', default: '1.25', large: '1.4' };
 
 			function setTextSize(size) {
 				const value = sizes[size] ? size : 'default';
@@ -148,92 +150,71 @@
 
 			sizeButtons.forEach((button) => button.addEventListener('click', () => setTextSize(button.dataset.textSize)));
 			themeButton.addEventListener('click', () => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light'));
+			motionToggle.addEventListener('click', () => setMotion(root.dataset.motion !== 'on'));
 
 			const codeCard = document.querySelector('.code-card');
 			const terminal = document.querySelector('#terminal-lines');
-			const codeTabs = [...document.querySelectorAll('[data-code-tab]')];
-			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			const codeSnippets = [
-				[
-					['code-muted', '// Java full-stack engineer'],
-					['code-purple', 'const zain = {'],
-					['code-green', '  focus: ["Java", "Spring", "React"],'],
-					['code-cyan', '  systems: ["Kafka", "Redis", "PostgreSQL"],'],
-					['code-orange', '  impact: "75% lower SQL latency"'],
-					['code-purple', '};'],
-					['code-green', 'zain.build();']
-				],
-				[
-					['code-cyan', '$ mvn clean verify'],
-					['code-muted', '> compile: Java + Spring Boot'],
-					['code-green', '✓ REST APIs ready'],
-					['code-green', '✓ SQL queries optimized'],
-					['code-green', '✓ React modules shipped'],
-					['code-orange', 'BUILD SUCCESS']
-				],
-				[
-					['code-muted', '// AI platform: Capgemini'],
-					['code-cyan', 'Amazon Polly + microservices'],
-					['code-orange', 'validation performance: ~7×'],
-					['code-muted', '// Payments: Tech Mahindra'],
-					['code-green', 'secure enterprise workflows'],
-					['code-orange', 'SQL transaction latency: -75%']
-				]
+			const reducedMotion = () => root.dataset.motion === 'off' || (motionPreference.matches && root.dataset.motion !== 'on');
+			const careerLog = [
+				['code-muted', '// CAREER.LOG : SELECTED DELIVERABLES'],
+				['code-cyan', '[STACK] Java · Spring Boot · React'],
+				['code-green', '[DELIVERED] Secure payment REST APIs'],
+				['code-orange', '[OPTIMIZED] SQL transaction latency ~75% lower'],
+				['code-cyan', '[INTEGRATED] Amazon Polly + external APIs'],
+				['code-orange', '[IMPROVED] Validation performance ~7×'],
+				['code-green', '[MIGRATED] Legacy JSP screens to React'],
+				['code-purple', '[BUILT] Multilingual transcription services'],
+				['code-cyan', '[SOLVED] 200+ DSA problems on LeetCode'],
+				['code-orange', '[EARNED] 5-star Gold Badge in Java'],
+				['code-muted', '[READY] Java full-stack engineer · 4+ years']
 			];
-			let typingRun = 0;
+			let logIndex = 0;
 			const pause = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
-
-			async function playCode(index) {
-				const run = ++typingRun;
-				const lines = codeSnippets[index];
-				codeTabs.forEach((tab) => {
-					const active = Number(tab.dataset.codeTab) === index;
-					tab.setAttribute('aria-selected', String(active));
-					tab.tabIndex = active ? 0 : -1;
-				});
-				terminal.replaceChildren();
-				for (const [className, text] of lines) {
-					if (run !== typingRun) return;
-					const line = document.createElement('span');
-					line.className = `terminal-line ${className}`;
-					terminal.append(line);
-					if (reducedMotion) {
-						line.textContent = text;
-					} else {
-						for (const character of text) {
-							if (run !== typingRun) return;
-						line.append(document.createTextNode(character));
-						await pause(19);
-						}
-					}
-					await pause(reducedMotion ? 0 : 100);
-				}
-				if (!reducedMotion) {
-					codeCard.classList.add('is-glitching');
-					window.setTimeout(() => codeCard.classList.remove('is-glitching'), 240);
-				}
-				await pause(2200);
-				if (run === typingRun) playCode((index + 1) % codeSnippets.length);
+			function setMotion(enabled, save = true) {
+				root.dataset.motion = enabled ? 'on' : 'off';
+				motionToggle.setAttribute('aria-pressed', String(enabled));
+				motionToggle.setAttribute('aria-label', enabled ? 'Pause visual effects' : 'Play visual effects');
+				motionToggle.querySelector('span').textContent = enabled ? 'FX ON' : 'FX OFF';
+				const trail = document.querySelector('.light-trail');
+				if (typeof trail.unpauseAnimations === 'function' && enabled) trail.unpauseAnimations();
+				if (typeof trail.pauseAnimations === 'function' && !enabled) trail.pauseAnimations();
+				if (save) { try { localStorage.setItem('zain-portfolio-motion', enabled ? 'on' : 'off'); } catch (_) {} }
 			}
 
-			codeTabs.forEach((tab) => {
-				tab.addEventListener('click', () => playCode(Number(tab.dataset.codeTab)));
-				tab.addEventListener('keydown', (event) => {
-					const current = Number(tab.dataset.codeTab);
-					const next = event.key === 'ArrowRight' ? (current + 1) % codeTabs.length : event.key === 'ArrowLeft' ? (current + codeTabs.length - 1) % codeTabs.length : event.key === 'Home' ? 0 : event.key === 'End' ? codeTabs.length - 1 : null;
-					if (next === null) return;
-					event.preventDefault();
-					codeTabs[next].focus();
-					playCode(next);
-				});
-			});
-			playCode(0);
+			async function streamCareerLog() {
+				const [className, message] = careerLog[logIndex % careerLog.length];
+				const text = `[${String(logIndex + 1).padStart(2, '0')}] ${message}`;
+				const line = document.createElement('span');
+				line.className = `terminal-line ${className}`;
+				terminal.append(line);
+				while (terminal.children.length > 7) terminal.firstElementChild.remove();
+				if (reducedMotion()) {
+					line.textContent = text;
+				} else {
+					for (const character of text) {
+						line.append(document.createTextNode(character));
+						await pause(25);
+					}
+				}
+				terminal.scrollTop = terminal.scrollHeight;
+				if (!reducedMotion() && logIndex % 4 === 3) {
+					codeCard.classList.add('is-glitching');
+					window.setTimeout(() => codeCard.classList.remove('is-glitching'), 260);
+				}
+				logIndex += 1;
+				await pause(reducedMotion() ? 1400 : 560);
+				streamCareerLog();
+			}
+			streamCareerLog();
 			try {
 				setTextSize(localStorage.getItem('zain-portfolio-text-size') || 'default');
 				setTheme(localStorage.getItem('zain-portfolio-theme') || 'dark');
+				const savedMotion = localStorage.getItem('zain-portfolio-motion');
+				setMotion(savedMotion === null ? !motionPreference.matches : savedMotion === 'on', false);
 			} catch (_) {
 				setTextSize('default');
 				setTheme('dark');
+				setMotion(!motionPreference.matches, false);
 			}
 		})();
 	</script>
