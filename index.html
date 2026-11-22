@@ -237,15 +237,27 @@
 			const terminal = document.querySelector('#terminal-lines');
 			const reducedMotion = () => root.dataset.motion === 'off' || (motionPreference.matches && root.dataset.motion !== 'on');
 			let concealTimer;
+			let asciiStartTimer;
+			let asciiEndTimer;
 			function revealPortrait() {
 				window.clearTimeout(concealTimer);
+				window.clearTimeout(asciiStartTimer);
+				window.clearTimeout(asciiEndTimer);
+				heroVisual.classList.remove('ascii-mode');
 				codeCard.classList.remove('is-sealed');
 				codeCard.classList.add('is-peeked');
 				heroVisual.classList.add('face-peek');
+				asciiStartTimer = window.setTimeout(() => {
+					heroVisual.classList.add('ascii-mode');
+					asciiEndTimer = window.setTimeout(() => heroVisual.classList.remove('ascii-mode'), 1800);
+				}, 1350);
 			}
-			function concealPortraitSoon(delay = 1800) {
+			function concealPortraitSoon(delay = 3500) {
 				window.clearTimeout(concealTimer);
 				concealTimer = window.setTimeout(() => {
+					window.clearTimeout(asciiStartTimer);
+					window.clearTimeout(asciiEndTimer);
+					heroVisual.classList.remove('ascii-mode');
 					codeCard.classList.remove('is-peeked');
 					codeCard.classList.add('is-sealed');
 					heroVisual.classList.remove('face-peek');

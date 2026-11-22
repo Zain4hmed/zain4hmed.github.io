@@ -971,3 +971,33 @@ body::after { opacity:.055; background:repeating-linear-gradient(0deg,transparen
 .credentials-section .panel-kicker { letter-spacing:.065em; }
 .footer { min-height:62px; }
 @media(max-width:650px) { .hero-summary { margin-bottom:18px; }.social-row { margin-top:15px; }.hero-metrics { margin-top:14px; }.hero-visual { margin-top:0; } }
+
+/* New accent set: ultraviolet, ember, and a small amount of acid green. */
+:root { --cyan:#9b8aff; --purple:#ff684d; --beam-red:#ff564d; --beam-orange:#ffa34d; --beam-uv:#b08cff; --beam-violet:#8b78ff; --beam-cyan:#f2a17c; }
+:root[data-theme="light"] { --cyan:#6349bd; --purple:#b83e2e; --beam-red:#bf3434; --beam-orange:#bc641c; --beam-uv:#704ab7; --beam-violet:#6045ae; --beam-cyan:#a54b36; }
+.hero { --cyan:#a391ff; --purple:#ff684d; }
+.work-section { --cyan:#ffa34d; --purple:#a391ff; }
+.experience-section { --cyan:#b7d96c; --purple:#f08159; }
+.credentials-section { --cyan:#9f8bff; --purple:#f1a353; }
+.about-section { --cyan:#ff765e; --purple:#a391ff; }
+.curiosities-section { --cyan:#ffa34d; --purple:#b7d96c; }
+:root[data-theme="light"] .hero { --cyan:#6249b0; --purple:#b83e2e; }
+:root[data-theme="light"] .work-section { --cyan:#a6531c; --purple:#6249b0; }
+:root[data-theme="light"] .experience-section { --cyan:#587b21; --purple:#a5482e; }
+:root[data-theme="light"] .credentials-section { --cyan:#6249b0; --purple:#a6531c; }
+:root[data-theme="light"] .about-section { --cyan:#a5482e; --purple:#6249b0; }
+:root[data-theme="light"] .curiosities-section { --cyan:#a6531c; --purple:#587b21; }
+.hero-focus-grid div { background:color-mix(in srgb,var(--panel) 76%,transparent); }
+.social-row a:hover { box-shadow:0 0 16px color-mix(in srgb,var(--cyan) 24%,transparent); }
+
+/* The console interaction explicitly holds a clean, monochrome ASCII portrait on screen. */
+.portrait-window { clip-path:none!important; background:transparent!important; }
+.portrait-window::before,.portrait-tile figcaption { display:none!important; }
+.portrait-scan { opacity:.06; }
+.hero-visual.ascii-mode .portrait-clean,.hero-visual.ascii-mode .portrait-glitch,.hero-visual.ascii-mode .portrait-jacket { opacity:0!important; }
+.hero-visual.ascii-mode .portrait-ascii { z-index:7; opacity:1!important; animation:ascii-text-jitter .22s steps(2,end) infinite!important; }
+.hero-visual.ascii-mode .portrait-scan { opacity:0!important; }
+:root[data-theme="dark"] .hero-visual.ascii-mode .portrait-ascii { color:#f5f0e8!important; text-shadow:0 0 1px rgba(255,255,255,.24); }
+:root[data-theme="light"] .hero-visual.ascii-mode .portrait-ascii { color:#201b17!important; text-shadow:0 0 1px rgba(28,21,15,.2); }
+@keyframes ascii-text-jitter { 0%,100% { transform:translateX(-50%); clip-path:inset(0 0 0 0); } 50% { transform:translateX(calc(-50% + 2px)); clip-path:inset(3% 0 1% 0); } }
+@media(max-width:480px) { .hero-visual.ascii-mode .portrait-ascii { font-size:6.5px; } }
