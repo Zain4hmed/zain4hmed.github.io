@@ -22,6 +22,14 @@
 				<a href="#connect">Connect</a>
 			</nav>
 			<span class="availability"><span class="pulse-dot"></span> SOFTWARE / DESIGN / IDEAS</span>
+			<div class="reader-controls" aria-label="Display settings">
+				<div class="text-controls" role="group" aria-label="Text size">
+					<button type="button" data-text-size="small" aria-label="Smaller text">A−</button>
+					<button type="button" data-text-size="default" aria-label="Default text size" aria-pressed="true">A</button>
+					<button type="button" data-text-size="large" aria-label="Larger text">A+</button>
+				</div>
+				<button class="theme-toggle" type="button" aria-label="Switch to light mode" title="Switch color theme"><i class="fa-solid fa-sun" aria-hidden="true"></i><span>LIGHT</span></button>
+			</div>
 		</header>
 
 		<main>
@@ -37,7 +45,7 @@
 					<div class="social-row" id="connect" aria-label="Social links">
 						<a href="https://github.com/zain4hmed" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
 						<a href="https://www.linkedin.com/in/zain-ahmed-689285223" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-						<a class="leetcode-link" href="https://leetcode.com/u/zain4hmed/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode">LC</a>
+						<a class="leetcode-link" href="https://leetcode.com/u/zain4hmed/" target="_blank" rel="noopener noreferrer" aria-label="LeetCode"><i class="fa-solid fa-code" aria-hidden="true"></i><span>LC</span></a>
 						<span class="social-caption">FIND ME AROUND THE WEB</span>
 					</div>
 				</div>
@@ -88,5 +96,41 @@
 
 		<footer class="footer section-wrap"><a class="brand" href="#home"><span class="brand-mark">Z<span>.</span></span><span class="brand-name">ZAIN AHMED</span></a><p>DESIGNED & BUILT WITH CURIOSITY <span>© 2026</span></p><a class="back-top" href="#home">BACK TO TOP ↑</a></footer>
 	</div>
+	<script>
+		(() => {
+			const root = document.documentElement;
+			const sizeButtons = [...document.querySelectorAll('[data-text-size]')];
+			const themeButton = document.querySelector('.theme-toggle');
+			const sizes = { small: '0.92', default: '1', large: '1.12' };
+
+			function setTextSize(size) {
+				const value = sizes[size] ? size : 'default';
+				root.dataset.textSize = value;
+				sizeButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.textSize === value)));
+				try { localStorage.setItem('zain-portfolio-text-size', value); } catch (_) {}
+			}
+
+			function setTheme(theme) {
+				const value = theme === 'light' ? 'light' : 'dark';
+				root.dataset.theme = value;
+				root.style.colorScheme = value;
+				const next = value === 'dark' ? 'light' : 'dark';
+				themeButton.setAttribute('aria-label', `Switch to ${next} mode`);
+				themeButton.querySelector('span').textContent = next.toUpperCase();
+				themeButton.querySelector('i').className = value === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+				try { localStorage.setItem('zain-portfolio-theme', value); } catch (_) {}
+			}
+
+			sizeButtons.forEach((button) => button.addEventListener('click', () => setTextSize(button.dataset.textSize)));
+			themeButton.addEventListener('click', () => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light'));
+			try {
+				setTextSize(localStorage.getItem('zain-portfolio-text-size') || 'default');
+				setTheme(localStorage.getItem('zain-portfolio-theme') || 'dark');
+			} catch (_) {
+				setTextSize('default');
+				setTheme('dark');
+			}
+		})();
+	</script>
 </body>
 </html>
