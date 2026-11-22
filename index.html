@@ -20,7 +20,6 @@
 			<path class="trail-base" pathLength="1000" d="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/>
 			<path class="trail-glow" pathLength="1000" d="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/>
 			<path class="trail-beam" pathLength="1000" d="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/>
-			<circle class="trail-particle" r="5"><animateMotion dur="21s" repeatCount="indefinite" path="M-40 455 C100 340 185 145 350 220 S555 500 715 360 S925 95 1240 185"/></circle>
 		</svg>
 	</div>
 	<div class="site-shell">
@@ -29,11 +28,8 @@
 			<nav class="nav-links" aria-label="Main navigation">
 				<a href="#work">Work</a>
 				<a href="#experience">Experience</a>
-				<a href="#credentials">Credentials</a>
-				<a href="#curiosities">Curiosities</a>
-				<a href="#about">Contact</a>
+				<a href="#credentials">More</a>
 			</nav>
-			<span class="availability"><span class="pulse-dot"></span> AGENTIC AI BACKEND / JAVA MICROSERVICES</span>
 			<div class="reader-controls" aria-label="Display settings">
 				<div class="text-controls" role="group" aria-label="Text size">
 					<button type="button" data-text-size="small" aria-label="Smaller text">A−</button>
@@ -41,7 +37,6 @@
 					<button type="button" data-text-size="large" aria-label="Larger text">A+</button>
 				</div>
 				<button class="theme-toggle" type="button" aria-label="Switch to light mode" title="Switch color theme"><i class="fa-solid fa-sun" aria-hidden="true"></i><span>LIGHT</span></button>
-				<button class="motion-toggle" type="button" aria-label="Pause visual effects" aria-pressed="true" title="Toggle visual effects"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span>FX ON</span></button>
 			</div>
 		</header>
 
@@ -123,7 +118,7 @@
 						<figcaption><span>IDENTITY.SYS / ZAIN AHMED</span><span>VISUAL SIGNAL / 04 STATES</span></figcaption>
 					</figure>
 					<div class="visual-crosshair crosshair-one"></div><div class="visual-crosshair crosshair-two"></div>
-					<div class="code-card">
+					<div class="code-card" tabindex="0" role="region" aria-label="Interactive engineering console. Hover or focus to reveal the portrait.">
 						<div class="code-card-top"><div class="window-dots"><i></i><i></i><i></i></div><span>ENGINEER.PROFILE // LIVE FEED</span><span class="code-live"><b></b> ONLINE</span></div>
 						<div class="code-content" aria-label="Automatically updating career log"><pre class="terminal-lines" id="terminal-lines" aria-hidden="true"></pre><span class="cursor" aria-hidden="true"></span></div>
 						<div class="code-card-bottom"><span><i class="fa-solid fa-terminal"></i> PRODUCTION → INTELLIGENCE</span><span>PROFILE / 01—12</span></div>
@@ -200,9 +195,8 @@
 			const root = document.documentElement;
 			const sizeButtons = [...document.querySelectorAll('[data-text-size]')];
 			const themeButton = document.querySelector('.theme-toggle');
-			const motionToggle = document.querySelector('.motion-toggle');
 			const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
-			const sizes = { small: '0.94', default: '1.08', large: '1.22' };
+			const sizes = { small: '0.94', default: '1', large: '1.15' };
 
 			function setTextSize(size) {
 				const value = sizes[size] ? size : 'default';
@@ -224,7 +218,6 @@
 
 			sizeButtons.forEach((button) => button.addEventListener('click', () => setTextSize(button.dataset.textSize)));
 			themeButton.addEventListener('click', () => setTheme(root.dataset.theme === 'light' ? 'dark' : 'light'));
-			motionToggle.addEventListener('click', () => setMotion(root.dataset.motion !== 'on'));
 
 			const scrollCodeObserver = 'IntersectionObserver' in window ? new IntersectionObserver((entries, observer) => {
 				entries.forEach((entry) => {
@@ -249,8 +242,28 @@
 			});
 
 			const codeCard = document.querySelector('.code-card');
+			const heroVisual = document.querySelector('.hero-visual');
 			const terminal = document.querySelector('#terminal-lines');
 			const reducedMotion = () => root.dataset.motion === 'off' || (motionPreference.matches && root.dataset.motion !== 'on');
+			let concealTimer;
+			function revealPortrait() {
+				window.clearTimeout(concealTimer);
+				codeCard.classList.remove('is-sealed');
+				codeCard.classList.add('is-peeked');
+				heroVisual.classList.add('face-peek');
+			}
+			function concealPortraitSoon(delay = 1800) {
+				window.clearTimeout(concealTimer);
+				concealTimer = window.setTimeout(() => {
+					codeCard.classList.remove('is-peeked');
+					codeCard.classList.add('is-sealed');
+					heroVisual.classList.remove('face-peek');
+				}, delay);
+			}
+			codeCard.addEventListener('pointerenter', revealPortrait);
+			codeCard.addEventListener('pointerleave', () => concealPortraitSoon());
+			codeCard.addEventListener('focusin', revealPortrait);
+			codeCard.addEventListener('focusout', () => concealPortraitSoon());
 			const careerLog = [
 				['code-muted', '// AGENTIC.BACKEND : ENGINEERING PROFILE'],
 				['code-cyan', '[ROLE] Agentic AI backend engineer'],
@@ -267,15 +280,8 @@
 			];
 			let logIndex = 0;
 			const pause = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
-			function setMotion(enabled, save = true) {
+			function setMotion(enabled) {
 				root.dataset.motion = enabled ? 'on' : 'off';
-				motionToggle.setAttribute('aria-pressed', String(enabled));
-				motionToggle.setAttribute('aria-label', enabled ? 'Pause visual effects' : 'Play visual effects');
-				motionToggle.querySelector('span').textContent = enabled ? 'FX ON' : 'FX OFF';
-				const trail = document.querySelector('.light-trail');
-				if (typeof trail.unpauseAnimations === 'function' && enabled) trail.unpauseAnimations();
-				if (typeof trail.pauseAnimations === 'function' && !enabled) trail.pauseAnimations();
-				if (save) { try { localStorage.setItem('zain-portfolio-motion', enabled ? 'on' : 'off'); } catch (_) {} }
 			}
 
 			async function streamCareerLog() {
@@ -326,16 +332,17 @@
 					surface.addEventListener('pointerleave', () => surface.classList.remove('pointer-active'));
 				});
 			}
+			concealPortraitSoon(3200);
 			try {
 				setTextSize(localStorage.getItem('zain-portfolio-text-size') || 'default');
 				setTheme(localStorage.getItem('zain-portfolio-theme') || 'dark');
-				const savedMotion = localStorage.getItem('zain-portfolio-motion');
-				setMotion(savedMotion === null ? !motionPreference.matches : savedMotion === 'on', false);
+				setMotion(!motionPreference.matches);
 			} catch (_) {
 				setTextSize('default');
 				setTheme('dark');
-				setMotion(!motionPreference.matches, false);
+				setMotion(!motionPreference.matches);
 			}
+			if (motionPreference.addEventListener) motionPreference.addEventListener('change', (event) => setMotion(!event.matches));
 		})();
 	</script>
 </body>
