@@ -958,7 +958,7 @@ body::after { opacity:.055; background:repeating-linear-gradient(0deg,transparen
 .portrait-window::before { display:none!important; }
 .portrait-tile figcaption { display:none!important; }
 .portrait-scan { opacity:.07; mix-blend-mode:normal; }
-.portrait-ascii { top:3%; font-size:7.5px; line-height:.86; letter-spacing:-.04em; color:#f5f0e8; text-shadow:0 0 1px rgba(255,255,255,.22); }
+.portrait-ascii { top:20%; font-size:7.5px; line-height:.86; letter-spacing:-.04em; color:#f5f0e8; text-shadow:0 0 1px rgba(255,255,255,.22); }
 :root[data-theme="light"] .portrait-ascii { color:#211d19; text-shadow:0 0 1px rgba(30,24,18,.2); }
 .hero-visual.face-peek .portrait-ascii { animation:face-jitter-ascii 3.7s steps(1,end) infinite!important; }
 :root[data-motion="off"] .hero-visual.face-peek .portrait-ascii { animation:face-jitter-ascii 3.7s steps(1,end) infinite!important; animation-play-state:running!important; }
